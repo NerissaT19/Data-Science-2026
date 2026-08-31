@@ -6,6 +6,9 @@ This is a curriculum of **open-source** data science exercises, intended to take
 
 Please see our [JOSE paper](https://jose.theoj.org/papers/10.21105/jose.00117) for more info.
 
+## Short Description
+This is Nerissa Theisen's repository for Fall 2026 data science assignments at Olin College.
+
 ## How to Use This Repo
 
 1. (Setup) Complete [this exercise](https://zdelrosario.github.io/data-science-curriculum/setup-rstudio.html) to install RStudio.
