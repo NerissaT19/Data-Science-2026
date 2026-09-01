@@ -1,7 +1,7 @@
 ---
 title: "Getting Started: Diamonds"
-author: "(Your name here)"
-date: 2020-
+author: "Nerissa Theisen"
+date: 2026-09-01
 output:
   github_document:
     toc: true
@@ -54,23 +54,51 @@ In this first stage, you will explore the `diamonds` dataset and document your o
 
 ```{r q1-task}
 ## TASK: Plot `price` vs `carat` below
-## Your code here!
+
+## Creates a ggplot that visualizes diamonds dataset
+diamonds %>%
+  ggplot() +
+  geom_point(         ## Adds geometry
+    mapping = aes(    ## Aesthetic mapping
+    x = carat,        ## Maps x variable (carat)
+    y = price         ## Maps y variable (price)
+    )
+  )
 ```
 
 **Observations**:
 
-- (Write your observations here!)
+- The prices of diamonds generally increase as the carats increase.
+- Diamonds between 1 and 1.5 carats have the widest range of prices.
+- The majority of diamonds are under 2.5 carats.
+- Prices for 2-2.5 carat diamonds are skewed towards the higher end of their range, while prices for 1-1.5 carat diamonds are skewed towards the lower end of their range. 
+- There is a sharp increase in the maximum price of a diamond around 1 carat.
 
 ### __q2__ Create a visualization showing variables `carat`, `price`, and `cut` simultaneously. Experiment with which variable you assign to which aesthetic (`x`, `y`, etc.) to find an effective visual.
 
 ```{r q2-task}
 ## TASK: Plot `price`, `carat`, and `cut` below
-## Your code here!
+
+## Creates a ggplot that visualizes diamonds dataset
+diamonds %>%
+  ggplot() +
+  geom_point(         ## Adds geometry
+    mapping = aes(    ## Aesthetic mapping
+    x = cut,          ## Maps x variable (cut)
+    y = carat,        ## Maps y variable (carat)
+    color = price     ## Maps color aesthetic (price)
+    )
+  )
 ```
 
 **Observations**:
 
-- (Write your observations here!)
+- Diamonds with a "fair" cut have the greatest range in carats, while diamonds with a "good" cut have the smallest range.
+- Lower carat diamonds generally have the lowest prices.
+- Higher prices become more frequent as the quality of a diamond's cut increases.
+- The majority of diamonds are less than 2.5 carats.
+- Higher carats does not always mean higher prices, as many of the larger outlier values in each cut category have lower prices than diamonds with carat values in the mid-range.
+- For the "very good and "ideal" cuts, there is a sharp increase in the typical price of a diamond beginning at around 1 carat. For the "premium" cut, this increase happens beginning around 1.25 carats.
 
 
 # Communication
