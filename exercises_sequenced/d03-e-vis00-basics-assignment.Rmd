@@ -26,12 +26,19 @@ Inspect the `diamonds` dataset. What do the `cut`, `color`, and `clarity` variab
 *Hint*: We learned how to inspect a dataset in `e-data-00-basics`!
 
 ```{r q1-task, eval=FALSE}
+?diamonds
 ```
+
+The `cut` variable specifies the quality of the diamond's cut, while the `color` variable specifies its color and the `clarity` variable specifies how clear it is.
 
 ### __q2__ Standard checks
 
 Use your "standard checks" to determine what variables the dataset has.
 
+```{r}
+glimpse(diamonds)
+```
+Variables: carat, cut, color, clarity, depth, table, price, x, y, and z.
 
 Now that we have the list of variables in the dataset, we know what we can visualize!
 
@@ -63,7 +70,7 @@ Assuming we're not messing with the data[1], this implies that making a plot boi
 
 [1] Sometimes we'll mess with the data to make a more informative plot---stay tuned!
 
-Let's practice: Adapt the code above to complet the task below.
+Let's practice: Adapt the code above to complete the task below.
 
 ### __q3__ Make your first ggplot
 
@@ -73,18 +80,27 @@ Using `ggplot`, visualize `price` vs `carat` with points. What trend do you obse
 
 ```{r q3-task}
 ## TODO: Complete this code
-ggplot(diamonds)
+ggplot(            # 1. Starting a ggplot
+  data = diamonds  # 2. Dataset to visualize
+) +                # 3. Adding elements to the plot
+  geom_point(      # 4. Geometry
+    mapping = aes( # 5. `Aes`thetic mapping
+      x = carat,   # 5.1. Mapping the `x` variable
+      y = price    # 5.2. Mapping the `y` variable
+    )
+  )
 ```
 
 **Observations**:
 
-- (Write your observations here!)
+- Price generally increases along with an increase in carats
+- 1 carat diamonds have the widest range in prices
+- Most diamonds are under 2.5 carats
+- Prices for 2 carat diamonds are skewed towards the higher end of their range, while prices for 1 carat diamonds are skewed towards the lower end of their range
 
 ## A note on *aesthetics*
 
 The function `aes()` is short for *aesthetics*. Aesthetics in ggplot are the mapping of variables in a dataframe to visual elements in the graph. For instance, in the plot above you assigned `carat` to the `x` aesthetic, and `price` to the `y` aesthetic. But there are *many more* aesthetics you can set, some of which vary based on the `geom_` you are using to visualize. 
-
-
 
 ```{r}
 ## NOTE: This is some more advanced code we'll learn to write later
@@ -107,6 +123,12 @@ As with any R function, we can consult the documentation to learn more.
 
 Look up the documentation for `geom_point()`, and scroll down to the *Aesthetics* section. What aesthetics (other than `x` and `y`) does `geom_point()` accept?
 
+```{r}
+?geom_point
+```
+
+Aside from `x` and `y`, `geom_point()` also accepts alpha, colour, fill, group, shape, size, and stroke aesthetics.
+
 ### __q5__ Visualize a third variable
 
 Adapt your code from q3 to visualize `price`, `carat`, and `cut` simultaneously.
@@ -115,12 +137,24 @@ Adapt your code from q3 to visualize `price`, `carat`, and `cut` simultaneously.
 
 ```{r q4-task}
 ## TODO: Complete this code
-ggplot(diamonds)
+ggplot(            # 1. Starting a ggplot
+  data = diamonds  # 2. Dataset to visualize
+) +                # 3. Adding elements to the plot
+  geom_point(      # 4. Geometry
+    mapping = aes( # 5. `Aes`thetic mapping
+      x = cut,   # 5.1. Mapping the `x` variable
+      y = carat,    # 5.2. Mapping the `y` variable
+      colour = price
+    )
+  )
 ```
 
 **Observations**:
 
-- (Write your observations here!)
+- Diamonds with a "fair" cut have the widest range of carat values.
+- Diamonds with "fair" and "good" cuts generally have the lowest prices.
+- Diamonds with lower carats generally have the lowest prices.
+- Diamonds in the mid-range of carat values have higher prices than many of the outlier higher-carat diamonds in each cut category.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
