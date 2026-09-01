@@ -31,8 +31,10 @@ associated with `"dplyr"`. What vignettes are available?
 
 ```{r q1-task, eval=FALSE}
 ## TODO: Re-write the code above following the tidyverse style guide
+vignette(package = "dplyr")
 ```
 
+The vignettes available are: colwise, base, grouping, dplyr, programming, recoding-replacing, rowwise, two-table in-packages, and window-functions. 
 
 Once we know *what* vignettes are available, we can use the same function to
 read a particular vignette.
@@ -41,6 +43,10 @@ read a particular vignette.
 Read this vignette up to the first note on `filter()`. Use `filter()` to select
 only those rows of the `iris` dataset where `Species == "setosa"`.
 
+```{r}
+vignette("dplyr", package = "dplyr")
+```
+
 *Note*: This should open up your browser.
 
 ```{r q2-task}
@@ -48,6 +54,7 @@ iris %>%
   as_tibble() %>%
   filter(
     # TODO: Filter on Species "setosa"
+    Species == "setosa"
   )
 ```
 
@@ -57,6 +64,7 @@ we know the verbs (functions) we want to use, we need more specific help.
 ### __q3__ Remember back to `e-setup02-functions`; how do we look up help for a
 specific function?
 
+To look up a specific function, we can write a ? and then the name of the function.
 
 Sometimes we'll be working with a function, but we won't *quite* know how to get
 it to do what we need. In this case, consulting the function's documentation can
@@ -68,6 +76,10 @@ with `Sepal.Length` between `5.1` and `6.4`?
 
 ```{r q3-task}
 ## TODO: Consult the docs; Write your code here
+?filter
+iris %>%
+  as_tibble() %>%
+  filter(Sepal.Length > 5.1, Sepal.Length < 6.4)
 ```
 
 
@@ -79,6 +91,23 @@ learn more.
 ### __q5__ Look up the documentation on `cut_number`; what package does it come
 from? What about `parse_number()`? What about `row_number()`?
 
+```{r}
+?cut_number
+```
+
+`cut_number` comes from the ggplot2 package.
+
+```{r}
+?parse_number
+```
+
+`parse_number` comes from the readr package.
+
+```{r}
+?row_number
+```
+
+`row_number` comes from the dplyr package.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
