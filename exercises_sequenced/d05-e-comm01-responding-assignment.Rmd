@@ -94,8 +94,13 @@ Here the bolded response is *actively* engaging with your colleague's question, 
 **Observations**:
 
 - Is the bolded response **active** or **passive**? Why?
+The bolded response is active. It acknowledges the colleague's question and elaborates based on it.
+
 - Is the bolded response **constructive** or **destructive**? Why?
+The bolded response is constructive. The answer is framed positively and the presenter doesn't insult the colleague for having a question.
+
 - How does this statement make you *feel*, relative to the bolded statement before the q1 prompt?
+The new statement feels a lot more positive than the first bolded statement. It makes it seem like the work environment the situation is happening in is supportive rather than discouraging.
 
 ### __q2__ Identify the nature of the bolded line below, rating it as either **active vs passive** and **constructive vs destructive**.
 
@@ -108,8 +113,14 @@ Here the bolded response is *actively* engaging with your colleague's question, 
 **Observations**:
 
 - Is the bolded response **active** or **passive**? Why?
+The bolded response is passive. The colleague is acknowledged, but their question isn't actually answered.
+
 - Is the bolded response **constructive** or **destructive**? Why?
+The bolded response is constructive. Although it is a passive response, the presenter reacts positively to the colleague's question.
+
 - How does this statement make you *feel*, relative to the bolded statement before the q1 prompt?
+The new statement feels a little more positive than the original bolded statement since the presenter said that colleague made a "good catch" rather than being rude, but both make the environment seem dismissive. The original version of the presenter answers the question, but their tone makes it seem like they don't care about clarification. In the new version, the presenter also appears to not care about clarification because they don't answer the question. 
+
 
 **Intermediate Conclusion**: We can quite naturally think of discussion responses in the APCD framework. Therefore, we should try to give active and constructive responses in data discussions!
 
@@ -175,7 +186,10 @@ Let's practice once more!
 **Observations**:
 
 - Is the bolded response **active** or **passive**? Why?
+The bolded response is passive. The colleague's question has to do with diamonds, which are related to the graph, but it doesn't actually have to do with the variables shown on the graph. 
+
 - Is the bolded response **constructive** or **destructive**? Why?
+The bolded response is destructive. It is an irrelevant question to the graph and puts the presenter in a hard place, since it can imply to some that the presenter is supporting something immoral.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
