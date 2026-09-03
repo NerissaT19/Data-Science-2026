@@ -36,6 +36,8 @@ library(tidyverse)
 Remember from `e02-data-basics` there were *simple checks* we're supposed to do? Do those simple checks on the diamonds dataset below.
 
 ```{r q0-task}
+glimpse(diamonds)
+summary(diamonds)
 ```
 
 I'm going to walk you through a train of thought I had when studying the diamonds dataset.
@@ -59,7 +61,7 @@ diamonds %>%
 ```
 
 **Observations**:
-- Write your observations here!
+Hypothesis 1 was not correct. `Ideal` cut diamonds are actually the most common cut in the data set.
 
 ## Hypothesis 2
 
@@ -78,7 +80,7 @@ diamonds %>%
 ```
 
 **Observations**:
-- Write your observations here!
+The graph does not relate to hypothesis 2. It is hard to read since there are many data points that are the same color and overlapping. It shows price ranges for each type of cut, but you can't tell how frequent each price is relative to other cuts.
 
 The following is a set of *boxplots*; the middle bar denotes the median, the boxes denote the *quartiles* (upper and lower "quarters" of the data), and the lines and dots denote large values and outliers.
 
@@ -93,7 +95,7 @@ diamonds %>%
 ```
 
 **Observations**:
-- Write your observations here!
+The graph contradicts hypothesis 2. `Ideal` cut diamonds have the lowest median price out of any of the cut types, and their upper price quartile is also the lowest of the cuts.
 
 ## Unraveling Hypothesis 2
 
@@ -112,7 +114,7 @@ diamonds %>%
 ```
 
 **Observations**:
-- Write your observations here!
+The graph supports a "carat over cut" hypothesis. Diamonds with a `Fair` cut have the highest median carat value, and the median carat value generally decreases as the cut becomes higher quality, aside from an increase for `Premium` cuts. This might mean that carat is more important for pricing than cut, because cut types that have a higher median for carat values have a higher median for price values.
 
 Note what we just did:
 
