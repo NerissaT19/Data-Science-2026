@@ -1,7 +1,7 @@
 ---
 title: "RMS Titanic"
-author: "(Your name here)"
-date: 2020-
+author: "Nerissa Theisen"
+date: 2026-09-06
 output:
   github_document:
     toc: true
@@ -52,11 +52,18 @@ df_titanic <- as_tibble(Titanic)
 
 ```{r q1-task}
 ## TASK: Perform a `glimpse` of df_titanic
+glimpse(df_titanic)
 ```
 
 **Observations**:
 
-- (List all variables here)
+Variables:
+
+- Class
+- Sex
+- Age
+- Survived
+- n
 
 ### __q2__ Skim the [Wikipedia article](https://en.wikipedia.org/wiki/RMS_Titanic) on the RMS Titanic, and look for a total count of souls aboard. Compare against the total computed below. Are there any differences? Are those differences large or small? What might account for those differences?
 
@@ -68,12 +75,11 @@ df_titanic %>% summarize(total = sum(n))
 
 **Observations**:
 
-- Write your observations here
 - Are there any differences?
-  - (Your response here)
+  - The Wikipedia article states that the Titanic had 2208 people on board. However, the        total we computed was 2201. The difference between the totals is small, at 7 people.
+  
 - If yes, what might account for those differences?
-  - (Your response here)
-  - ...
+  - The difference may be caused by unclear or partially lost physical logs of passengers      and crew members. For example, passengers may have missed or cancelled their trip and      not actually ended up on the ship, while their names were still kept in records. The       crew was also not a permanent crew and some of them may have not been properly             accounted for.
 
 ### __q3__ Create a plot showing the count of persons who *did* survive, along with aesthetics for `Class` and `Sex`. Document your observations below.
 
@@ -81,11 +87,21 @@ df_titanic %>% summarize(total = sum(n))
 
 ```{r q3-task}
 ## TASK: Visualize counts against `Class` and `Sex`
+df_titanic %>%
+  filter(Survived == "Yes") %>%
+  ggplot(aes(x = Sex, y = n, fill = Class)) +
+  geom_col(position = "dodge")
 ```
 
 **Observations**:
 
-- Write your observations here
+- There were more male survivors than female survivors.
+- The majority of female survivors were passengers, not crew.
+- A little over half of the male survivors were crew, not passengers.
+- There were many more male crew survivors than female crew survivors.
+- For males, 3rd class had the highest number of survivors, while 2nd class had the lowest.
+- For females, 1st class had the highest number of survivors, while 3rd class had the        lowest.
+- 3rd class had a similar number of both male and female survivors, while there were many    more female survivors than male survivors for 1st and 2nd class.
 
 # Deeper Look
 <!-- -------------------------------------------------- -->
@@ -111,26 +127,61 @@ df_prop
 ### __q4__ Replicate your visual from q3, but display `Prop` in place of `n`. Document your observations, and note any new/different observations you make in comparison with q3. Is there anything *fishy* in your plot?
 
 ```{r q4-task}
+## Visualizes proportions against `Class` and `Sex`
+df_titanic %>%
+  group_by(Class, Sex, Age) %>%
+  mutate(
+    Total = sum(n),
+    Prop = n / Total
+  ) %>%
+  ungroup() %>%
+  filter(Survived == "Yes") %>%
+  ggplot(aes(x = Sex, y = Prop, fill = Class)) +
+  geom_col(position = "dodge")
 ```
 
 **Observations**:
 
 - Write your observations here.
+  - The last chart showed that fewer female crew members survived than male crew members.      However, this one reveals that most female crew members survived, while most male crew     members died, so there must have been less female crew members.
+  - The last chart showed that more males survived than females, while this one shows that     a greater proportion of female 3rd class passengers survived than male 3rd class           passengers.
+  - According to the plot, all female and male 1st and 2nd class passengers survived.
+  - Females, whether 3rd class passengers or crew members, were more likely to survive than     male 3rd class passengers or crew members, which was not apparent in the last chart.
+  
 - Is there anything *fishy* going on in your plot?
-  - (Your response here)
+  - Both the 1st and 2nd class survivors for males and females have a proportion of exactly     1, which is a very big coincidence.
 
 ### __q5__ Create a plot showing the group-proportion of occupants who *did* survive, along with aesthetics for `Class`, `Sex`, *and* `Age`. Document your observations below.
 
 *Hint*: Don't forget that you can use `facet_grid` to help consider additional variables!
 
 ```{r q5-task}
+## Visualizes proportions against `Class` and `Sex`, and `Age`
+df_titanic %>%
+  group_by(Class, Sex, Age) %>%
+  mutate(
+    Total = sum(n),
+    Prop = n / Total
+  ) %>%
+  ungroup() %>%
+  filter(Survived == "Yes") %>%
+  ggplot(aes(x = Sex, y = Prop)) +
+  geom_col() +
+  facet_grid (Age ~ Class)
 ```
 
 **Observations**:
 
 - (Write your observations here.)
+  - All child passengers in 1st and 2nd class survived, while less than half of both sexes     survived in 3rd class.
+  - Almost all female passengers in 1st class survived.
+  - Across the board, a greater proportion of females survived than males.
+  - 1st class had the greatest proportion of survivors for both sexes.
+  - For adult females, the proportion of survivors decreases with each class. For adult        males, 1st class has the highest proportion, 3rd class has the second highest              proportion, and 2nd class has the lowest proportion.
+  - The group with the lowest proportion of survivors overall was adult males in 2nd class.
+
 - If you saw something *fishy* in q4 above, use your new plot to explain the fishy-ness.
-  - (Your response here)
+  - The strange proportions for 1st and 2nd class survivors in the last bar chart were       likely caused by stacking. The new chart shows that all children in both classes           survived, while not all adults did. Since the old visual didn't take separations between   age groups into account, it ended up only showing the proportions for children. 
 
 # Notes
 <!-- -------------------------------------------------- -->
