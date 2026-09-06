@@ -114,11 +114,11 @@ The following code attempts to visualize `cty, hwy` from `mpg` using `geom_col()
 ```{r q2-task}
 mpg %>%
   ggplot(aes(x = cty, y = hwy)) +
-  geom_col()
+  geom_col(position = "dodge")
 ```
 
 **Observations**:
-- Write your observations here!
+- The plot makes it seem like the highway miles per gallon are always about 30 when the city miles per gallon are 20, but when looking at the actual dataset, we can see that the highway miles per gallon vary when the city miles per gallon are 20. The `cty` values are "stacking" in the plot and it doesn't give a good representation of the data.
 
 ## Stacked bar charts
 
@@ -164,7 +164,9 @@ mpg %>%
 ```
 
 **Observations**:
-- Write your observations here!
+- SUVs are the most common class of cars.
+- 2 seaters are the least common class of cars.
+- Most cars have four or five seats.
 
 ```{r q4-v2}
 ## TODO: Run this code without changing, describe your observations on the data
@@ -174,12 +176,20 @@ mpg %>%
 ```
 
 **Observations**:
-- Write your observations here!
+- SUVs are the most common class of cars.
+- 2 seaters are the least common class of cars.
+- Rear wheel drive is the least common type of drive train.
+- 2 seaters, minivans, and pickups all have no variety in drive train types. The 2 seaters only have rear wheel drive, the minivans all have front wheel drive, and the pickups all have 4 wheel drive.
+- No SUVs in the dataset have front wheel drive.
+- Larger cars are more likely to have 4 wheel drive.
 
 **Compare `v1` and `v2`**:
 
 - Which visualization---`v1` or `v2`---enabled you to make more observations?
+`v2` enabled me to make more observations.
+
 - What was the difference between `v1` and `v2`?
+`v1` had solidly colored bars that only showed the count of each type of car, while `v2` had separated colors inside the bars that showed the distribution of drive train types across the count of each type of car.
 
 ### __q4__ Fix this plot
 
@@ -189,13 +199,17 @@ The following code has a bug; it does not do what its author intended. Identify 
 
 ```{r q4-task}
 mpg %>%
-  ggplot(aes(x = manufacturer, fill = class), position = "dodge") +
-  geom_bar() +
+  ggplot(aes(x = manufacturer, fill = class)) +
+  geom_bar(position = "dodge") +
   theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 0))
 ```
 
 **Observations**
-- Your observations here!
+- Honda, Jeep, Land Rover, Lincoln, Mercury, and Pontiac all only have 1 class of car in the dataset.
+- Toyota has the most variety in car types in the dataset.
+- Most manufacturers with only one type of car make SUVs.
+- Chevrolet is the only manufacturer with 2 seater cars in the dataset.
+- Manufacturers with more variety in car types have more representation in the dataset.
 
 ## A bit on facets
 
@@ -257,9 +271,9 @@ The following graph is hard to read. Experiment with other choices of faceting t
 
 ```{r q5-task}
 mpg %>%
-  ggplot(aes(x = cyl)) +
+  ggplot(aes(x = manufacturer)) +
   geom_bar() +
-  facet_grid(~ manufacturer)
+  facet_grid(cyl ~ .)
 ```
 
 <!-- include-exit-ticket -->
