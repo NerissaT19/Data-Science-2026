@@ -65,6 +65,11 @@ Convert the following `geom_bar()` plot into the same visual using `geom_col()`.
 mpg %>%
   ggplot(aes(trans)) +
   geom_bar()
+
+mpg %>%
+  count(trans) %>%
+  ggplot(aes(x = trans, y = n)) +
+  geom_col()
 ```
 
 ## Fundamentals of the bar chart
