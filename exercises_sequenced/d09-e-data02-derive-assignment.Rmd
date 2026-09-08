@@ -37,6 +37,7 @@ filter(diamonds, cut == "Ideal")
 diamonds %>% filter(cut == "Ideal")
 ```
 
+Both lines of code do the same thing, as they filter the diamonds dataset to only include diamonds with an "ideal" cut. However, the second version uses a pipe to insert the dataset into the filter() function, while the first version does not.
 
 ## Summarizing
 
@@ -87,7 +88,8 @@ Using `summarize()` and a logical summary function, determine the number of rows
 *Hint*: We learned about checking for equality in `e-data01-isolate`.
 
 ```{r q2-task}
-df_q2
+df_q2 <- diamonds %>%
+  summarize(n_ideal = sum(cut == "Ideal"))
 ```
 
 The following test will verify that your `df_q2` is correct:
@@ -130,10 +132,11 @@ The function `group_by()` modifies how other dplyr verbs function. Uncomment the
 
 ```{r q3-task}
 diamonds %>%
-  ## group_by(color, clarity) %>%
+  group_by(color, clarity) %>%
   summarize(price_mean = mean(price))
 ```
 
+The result was originally the mean price of every diamond in the dataset, but after uncommenting the group_by() line, the result ends up being a list of the mean price of the diamonds in different color and clarity groups.
 
 ## Row computations with `mutate()`
 
@@ -173,14 +176,22 @@ Assign the resulting tibble to `df_q4`, and assign the appropriate values to `co
 ```{r q4-task}
 ## TODO: Compute the `cov_depth` and `cov_diff` and assign the result to df_q4
 df_q4 <-
-  diamonds
+  diamonds %>%
+  mutate(`depth_computed` = 100 * 2 * z / (x + y)) %>%
+  mutate(`diff` = depth - depth_computed) %>%
+  mutate(`cov_depth` = sd(depth) / mean(depth)) %>%
+  mutate(`cov_diff` = sd(diff, na.rm = TRUE) / mean(diff, na.rm = TRUE)) %>%
+  select(`cov_depth`, `cov_diff`, everything())
 df_q4
 ```
 
 **Observations**
 
 - Comment on the relative values of `cov_depth` and `cov_diff`.
+  - `cov_depth` has a very small value below 1, while `cov_diff` has a large value, at          almost 500. 
+  
 - Why is `cov_diff` so large?
+    - `cov_diff` is so large because there is a lot of variation in the differences between      `depth` and `computed_depth` for each row, especially because the difference can be         negative. On the other hand, there are no negative values in `cov_depth` and most          values are relatively close to each other.
 
 The following test will verify that your `df_q4` is correct:
 
@@ -199,6 +210,12 @@ Compute the `price_mean = mean(price)`, `price_sd = sd(price)`, and `price_cov =
 
 ```{r q5-task}
 ## TODO: Assign result to df_q5
+df_q5 <- diamonds %>%
+  group_by(cut) %>%
+  mutate(`price_mean` = mean(price)) %>%
+  mutate(`price_sd` = sd(price)) %>%
+  mutate(`price_cov` = price_sd / price_mean) %>%
+  select(`price_cov`, everything())
 df_q5
 ```
 
@@ -222,7 +239,11 @@ print("Excellent!")
 ```
 
 **Observations**:
-- Write your observations here!
+- "Ideal" cuts have the largest coefficient of variation for price.
+- "Fair" cuts have the lowest coefficient of variation for price.
+- The coefficient of variation for price increases as the cut quality increases.
+
+These observations make sense with the context of my earlier viewings of the dataset. Diamonds with lower quality cuts skewed towards having lower prices. Diamonds of higher quality cuts still had the lower prices, but they had a greater number of options with higher prices, leading to more variation. 
 
 <!-- include-exit-ticket -->
 # Exit Ticket
