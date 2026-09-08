@@ -50,7 +50,9 @@ Make a histogram of `cty` fuel economy.
 
 ```{r q1-task}
 ## TASK: Make a histogram of
-mpg %>%
+mpg %>% 
+  ggplot(aes(cty)) +
+  geom_histogram(bins = 20)
 # TODO: Finish this code
 ```
 
@@ -119,8 +121,13 @@ Density plots are better for showing where the data tends to be located. Frequen
 Using the graphs generated in the chunks `q1-vis1` and `q1-vis2` below, answer:
 
 - Which `class` has the most vehicles?
+  - The SUV `class` has the most vehicles.
+
 - Which `class` has the broadest distribution of `cty` values?
+  - Subcompact cars have the broadest distribution of `cty` values.
+  
 - Which graph---`vis1` or `vis2`---best helps you answer each question?
+  - `vis1` best helps answer question 1, while `vis2` best helps answer question 2.
 
 ```{r q2-vis1}
 ## NOTE: No need to modify
@@ -145,9 +152,11 @@ In the previous exercise, we learned how to *facet* a graph. Let's use that part
 Modify `q1-vis2` to use a `facet_wrap()` on the `class`. "Free" the vertical axis with the `scales` keyword to allow for a different y scale in each facet.
 
 ```{r q3-task}
+?facet_wrap
 mpg %>%
   ggplot(aes(cty, color = class)) +
-  geom_density()
+  geom_density() +
+  facet_wrap(vars(class), scales = "free_y")
 ```
 
 In the reading, we learned that the "most important thing" to keep in mind with `geom_histogram()` and `geom_freqpoly()` is to _explore different binwidths_. We'll explore this idea in the next question.
@@ -170,7 +179,11 @@ diamonds %>%
 ```
 
 **Observations**
-- Write your observations here!
+- When the binwidth is 0.0075, there are spikes in count around 0.3, 0.4, 0.5, 0.7, 0.9, and 1 carat.
+- When the binwidth is 0.01, there are spikes in count around 0.3, 0.4, 0.5, 0.7, 0.9, and 1 carat.
+- When the binwidth is 0.05, there are spikes in count around 0.3, 0.5, 0.7, and 1 carat.
+- When the binwidth is 0.075, there are spikes in count around 0.3, 0.7, and 1 carat.
+- Across all binwidths, there are obvious spikes in count around 0.3, 0.7, and 1 carat. The largest spike is always at 0.3 carats.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
