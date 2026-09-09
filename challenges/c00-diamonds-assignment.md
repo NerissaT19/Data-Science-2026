@@ -100,13 +100,12 @@ document your observations.
 
 ## Creates a ggplot that visualizes diamonds dataset
 diamonds %>%
-  ggplot() +
-  geom_point(         ## Adds geometry
+  ggplot(
     mapping = aes(    ## Aesthetic mapping
-    x = carat,        ## Maps x variable (carat)
-    y = price         ## Maps y variable (price)
-    )
-  )
+      x = carat,      ## Maps x variable (carat)
+      y = price       ## Maps y variable (price)
+  )) +
+  geom_point()         ## Adds geometry
 ```
 
 ![](c00-diamonds-assignment_files/figure-gfm/q1-task-1.png)<!-- -->
@@ -129,14 +128,13 @@ diamonds %>%
 
 ## Creates a ggplot that visualizes diamonds dataset
 diamonds %>%
-  ggplot() +
-  geom_point(         ## Adds geometry
+  ggplot(
     mapping = aes(    ## Aesthetic mapping
     x = cut,          ## Maps x variable (cut)
     y = carat,        ## Maps y variable (carat)
     color = price     ## Maps color aesthetic (price)
-    )
-  )
+  )) +
+  geom_point()         ## Adds geometry
 ```
 
 ![](c00-diamonds-assignment_files/figure-gfm/q2-task-1.png)<!-- -->
