@@ -57,13 +57,12 @@ In this first stage, you will explore the `diamonds` dataset and document your o
 
 ## Creates a ggplot that visualizes diamonds dataset
 diamonds %>%
-  ggplot() +
-  geom_point(         ## Adds geometry
+  ggplot(
     mapping = aes(    ## Aesthetic mapping
-    x = carat,        ## Maps x variable (carat)
-    y = price         ## Maps y variable (price)
-    )
-  )
+      x = carat,      ## Maps x variable (carat)
+      y = price       ## Maps y variable (price)
+  )) +
+  geom_point()         ## Adds geometry
 ```
 
 **Observations**:
@@ -81,14 +80,13 @@ diamonds %>%
 
 ## Creates a ggplot that visualizes diamonds dataset
 diamonds %>%
-  ggplot() +
-  geom_point(         ## Adds geometry
+  ggplot(
     mapping = aes(    ## Aesthetic mapping
     x = cut,          ## Maps x variable (cut)
     y = carat,        ## Maps y variable (carat)
     color = price     ## Maps color aesthetic (price)
-    )
-  )
+  )) +
+  geom_point()         ## Adds geometry
 ```
 
 **Observations**:
