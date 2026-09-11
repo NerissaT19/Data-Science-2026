@@ -334,12 +334,14 @@ df_q2 %>%
 
 ![](c02-michelson-assignment_files/figure-gfm/q4-cf-real-simulated-1.png)<!-- -->
 
-**Observations**: Similarities - Both datasets have peaks and valleys in
-the mean around the same dates. - There are measurements that are
-outside the upper and lower control limits in both the real and
-simulated data.
+**Observations**: 
+Similarities 
+- Both datasets have peaks and valleys in the mean around the same dates. 
+- There are measurements that are outside the upper and lower control limits in 
+  both the real and simulated data.
 
-Differences - The gray line for the real data has more areas outside of
+Differences 
+- The gray line for the real data has more areas outside of
 the control limits than the gray line for the simulated data. - The gray
 line for the real data has areas outside of both the upper and lower
 control limits, while the gray line for the simulated data only has
