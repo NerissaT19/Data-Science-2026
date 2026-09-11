@@ -157,15 +157,17 @@ df_q1
 | 2            |  39 |     299858.5 |
 | 1            |  15 |     299808.0 |
 
-**Observations**: - Write your observations here! - 3 is the most common
-distinctness, while 1 is the least common. - The mean velocities when
-distinctness is 2 or 3 are close to each other, being 3.2 km/s apart.
-However, the mean velocity when distinctness is 1 is about 50 km/s apart
-from the other mean velocities. - The highest distinctness has the
-highest number of occurrences and the highest mean velocity, while the
-lowest distinctness has the lowest of occurrences and the lowest mean
-velocity. - The mean velocities in my table are close to, but not
-exactly the same as, the values from Michelson’s table.
+**Observations**: 
+- Write your observations here! 
+  - 3 is the most common distinctness, while 1 is the least common. 
+  - The mean velocities when distinctness is 2 or 3 are close to each other, 
+    being 3.2 km/s apart. However, the mean velocity when distinctness is 1 is 
+    about 50 km/s apart from the other mean velocities. 
+  - The highest distinctness has the highest number of occurrences and the 
+    highest mean velocity, while the lowest distinctness has the lowest of 
+    occurrences and the lowest mean velocity. 
+  - The mean velocities in my table are close to, but not exactly the same as, 
+    the values from Michelson’s table.
 
 - Why might your table differ from Michelson’s?
   - My table might differ from Michelson’s because of the way that
@@ -243,9 +245,10 @@ LIGHTSPEED_PM                             ## Plus/minus bounds of Michelson's es
 
     ## [1] 51
 
-**Observations**: - Is Michelson’s estimate of the error (his
-uncertainty) greater or less than the true error? - Michelson’s estimate
-of the error is less than the true error.
+**Observations**: 
+- Is Michelson’s estimate of the error (his uncertainty) greater or less than 
+  the true error? 
+  - Michelson’s estimate of the error is less than the true error.
 
 - Make a quantitative comparison between Michelson’s uncertainty and his
   error.
