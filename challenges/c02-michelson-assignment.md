@@ -342,17 +342,19 @@ Similarities
   both the real and simulated data.
 
 Differences 
-- The gray line for the real data has more areas outside of
-the control limits than the gray line for the simulated data. - The gray
-line for the real data has areas outside of both the upper and lower
-control limits, while the gray line for the simulated data only has
-areas outside of the upper control limit. - The peaks in the mean are
-higher in the real data before June 23, and higher in the simulated data
-after June 23. - The mean in the real data starts and ends very close to
-the center line, while the mean in the simulated data starts below the
-center line and ends slightly above it. - The highest measurement in the
-real data is greater than in the simulated data. Similarly, the lowest
-measurement in the real data is lesser than in the simulated data.
+- The gray line for the real data has more areas outside of the control limits 
+  than the gray line for the simulated data. 
+- The gray line for the real data has areas outside of both the upper and lower
+  control limits, while the gray line for the simulated data only has areas 
+  outside of the upper control limit. 
+- The peaks in the mean are higher in the real data before June 23, and higher 
+  in the simulated data after June 23. 
+- The mean in the real data starts and ends very close to the center line, while
+  the mean in the simulated data starts below the center line and ends slightly 
+  above it. 
+- The highest measurement in the real data is greater than in the simulated 
+  data. Similarly, the lowest measurement in the real data is lesser than in the
+  simulated data.
 
 ### **q5** You have access to a few other variables. Construct a **at least three** visualizations of `VelocityVacuum` against these other factors. Are there other patterns in the data that might help explain the difference between Michelson’s estimate and `LIGHTSPEED_VACUUM`?
 
