@@ -335,6 +335,7 @@ df_q2 %>%
 ![](c02-michelson-assignment_files/figure-gfm/q4-cf-real-simulated-1.png)<!-- -->
 
 **Observations**: 
+
 Similarities 
 - Both datasets have peaks and valleys in the mean around the same dates. 
 - There are measurements that are outside the upper and lower control limits in 
