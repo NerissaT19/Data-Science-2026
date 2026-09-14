@@ -102,7 +102,7 @@ Reorder `class` according to `hwy`. Pay attention to how this modifies the plot.
 ```{r q2-task}
 ## TASK: Edit this code to reorder `class` according to `hwy`
 mpg %>%
-  mutate(class = fct_reorder(class, hwy))
+  mutate(class = fct_reorder(class, hwy)) %>%
   ggplot(aes(x = class, y = hwy)) +
   geom_boxplot()
 ```
@@ -123,15 +123,19 @@ Use a `cut_*` verb (of your choice) to create a categorical variable out of `car
 *Hint*: Recall that we learned how to look up documentation in an earlier exercise!
 
 ```{r q1-task}
+?cut_number
 diamonds %>%
   ## TODO: Use mutate to add the column `carat_cut`
+  mutate(carat_cut = cut_interval(1:53940, 15)) %>%
   ggplot(aes(x = carat_cut, y = price)) +
   geom_boxplot()
 ```
 
 **Observations**
-- Write your observations here!
-- Make sure to distinguish between the trend in median (bar), quantiles (box edges), and whiskers (vertical lines)
+- When the cut only has a length of 1, the top whisker of the box is much longer than the bottom whisker and there are many outlier values.
+- No matter the cut length, the middle box always has the widest range in values between the lower and upper quartiles.
+- No matter the cut length, there is a trend of the whiskers getting progressively larger up until the middle box. After this box, the whiskers become smaller and the pattern resets. The same trend applies for the medians and lower and upper quartiles.
+- At greater cut lengths, the outlier values are always below the lower whiskers of the boxes. However, at lengths 10 and below, there is sometimes a line of outlier values above the upper whisker for the box after the middle box.
 
 ## Coordinate flipping
 
@@ -153,7 +157,8 @@ The following plot has overlapping x-axis labels. Use a verb from the reading to
 ```{r q4-task}
 mpg %>%
   ggplot(aes(manufacturer, hwy)) +
-  geom_boxplot()
+  geom_boxplot() +
+  coord_flip()
 ```
 
 This is a simple---but important---trick to remember when visualizing data with many categories.
