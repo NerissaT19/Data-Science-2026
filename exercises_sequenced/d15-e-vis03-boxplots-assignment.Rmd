@@ -53,7 +53,10 @@ mpg %>%
 
 **Observations**
 - Which class tends to be most "middle" for `displ` values?
+The minivan class tends to be the most "middle" for `displ` values. 
+
 - Which plot is more effective for answering the previous question?
+The boxplot is more effective for answering the previous question. 
 
 ## Boxplot definition
 
@@ -99,6 +102,7 @@ Reorder `class` according to `hwy`. Pay attention to how this modifies the plot.
 ```{r q2-task}
 ## TASK: Edit this code to reorder `class` according to `hwy`
 mpg %>%
+  mutate(class = fct_reorder(class, hwy))
   ggplot(aes(x = class, y = hwy)) +
   geom_boxplot()
 ```
