@@ -157,17 +157,15 @@ df_q1
 | 2            |  39 |     299858.5 |
 | 1            |  15 |     299808.0 |
 
-**Observations**: 
-- Write your observations here! 
-  - 3 is the most common distinctness, while 1 is the least common. 
-  - The mean velocities when distinctness is 2 or 3 are close to each other, 
-    being 3.2 km/s apart. However, the mean velocity when distinctness is 1 is 
-    about 50 km/s apart from the other mean velocities. 
-  - The highest distinctness has the highest number of occurrences and the 
-    highest mean velocity, while the lowest distinctness has the lowest of 
-    occurrences and the lowest mean velocity. 
-  - The mean velocities in my table are close to, but not exactly the same as, 
-    the values from Michelson’s table.
+**Observations**: - Write your observations here! - 3 is the most common
+distinctness, while 1 is the least common. - The mean velocities when
+distinctness is 2 or 3 are close to each other, being 3.2 km/s apart.
+However, the mean velocity when distinctness is 1 is about 50 km/s apart
+from the other mean velocities. - The highest distinctness has the
+highest number of occurrences and the highest mean velocity, while the
+lowest distinctness has the lowest of occurrences and the lowest mean
+velocity. - The mean velocities in my table are close to, but not
+exactly the same as, the values from Michelson’s table.
 
 - Why might your table differ from Michelson’s?
   - My table might differ from Michelson’s because of the way that
@@ -245,10 +243,9 @@ LIGHTSPEED_PM                             ## Plus/minus bounds of Michelson's es
 
     ## [1] 51
 
-**Observations**: 
-- Is Michelson’s estimate of the error (his uncertainty) greater or less than 
-  the true error? 
-  - Michelson’s estimate of the error is less than the true error.
+**Observations**: - Is Michelson’s estimate of the error (his
+uncertainty) greater or less than the true error? - Michelson’s estimate
+of the error is less than the true error.
 
 - Make a quantitative comparison between Michelson’s uncertainty and his
   error.
@@ -334,27 +331,22 @@ df_q2 %>%
 
 ![](c02-michelson-assignment_files/figure-gfm/q4-cf-real-simulated-1.png)<!-- -->
 
-**Observations**: 
+**Observations**: Similarities - Both datasets have peaks and valleys in
+the mean around the same dates. - There are measurements that are
+outside the upper and lower control limits in both the real and
+simulated data.
 
-Similarities 
-- Both datasets have peaks and valleys in the mean around the same dates. 
-- There are measurements that are outside the upper and lower control limits in 
-  both the real and simulated data.
-
-Differences 
-- The gray line for the real data has more areas outside of the control limits 
-  than the gray line for the simulated data. 
-- The gray line for the real data has areas outside of both the upper and lower
-  control limits, while the gray line for the simulated data only has areas 
-  outside of the upper control limit. 
-- The peaks in the mean are higher in the real data before June 23, and higher 
-  in the simulated data after June 23. 
-- The mean in the real data starts and ends very close to the center line, while
-  the mean in the simulated data starts below the center line and ends slightly 
-  above it. 
-- The highest measurement in the real data is greater than in the simulated 
-  data. Similarly, the lowest measurement in the real data is lesser than in the
-  simulated data.
+Differences - The gray line for the real data has more areas outside of
+the control limits than the gray line for the simulated data. - The gray
+line for the real data has areas outside of both the upper and lower
+control limits, while the gray line for the simulated data only has
+areas outside of the upper control limit. - The peaks in the mean are
+higher in the real data before June 23, and higher in the simulated data
+after June 23. - The mean in the real data starts and ends very close to
+the center line, while the mean in the simulated data starts below the
+center line and ends slightly above it. - The highest measurement in the
+real data is greater than in the simulated data. Similarly, the lowest
+measurement in the real data is lesser than in the simulated data.
 
 ### **q5** You have access to a few other variables. Construct a **at least three** visualizations of `VelocityVacuum` against these other factors. Are there other patterns in the data that might help explain the difference between Michelson’s estimate and `LIGHTSPEED_VACUUM`?
 
@@ -397,10 +389,10 @@ df_q2 %>%
 
 **Observations**:
 
-- Velocity in a vacuum doesn’t have a super clear relationship with
-  temperature. Maximum temperature does generally increase as observed
-  velocity increases, but the temperature values are otherwise spread
-  out.
+- Maximum temperature generally increases as observed velocity
+  increases.
+- Velocity values become more spread out when the temperature is over 70
+  degrees.
 - When the observed velocity was over 300,000 km/s, the temperature was
   almost never below 70 degrees.
 - The widest range of velocities observed occurred when the distinctness
@@ -416,16 +408,16 @@ df_q2 %>%
 - The three most “extreme” velocity cases occurred when the distinctness
   was 1 or 2.
 
-The cause behind the difference between Michelson’s estimate and the
-true speed of light could be from equipment limitations or measurement
-errors. The data shows that there is no clear correlation between
-temperature and velocity values. When image distinctness was higher, the
-velocities were not notably closer to the actual value of the speed of
-light. Each distinctness also had a wide range of velocities measured,
-so it is hard to definitively determine their effect on Michelson’s
-estimate. Since distinctness and temperature don’t offer a clear
-explanation behind the error in Michelson’s estimate, we would have to
-look at other environmental or experimental factors.
+High temperatures could be a reason for Michelson’s error because they
+seem to lead to more inconsistent readings. There wasn’t an extremely
+clear relationship between temperature and observed velocity, but when
+temperatures were higher than 70 degrees, the velocity values became
+more spread out, The maximum values also increased, becoming further
+from the true speed of light. On the other hand, when image distinctness
+was higher, the velocities were not notably closer to the actual value
+of the speed of light. Each distinctness also had a wide range of
+velocities measured, so it is hard to definitively determine their
+effect on Michelson’s estimate.
 
 ## Bibliography
 

@@ -263,7 +263,8 @@ df_q2 %>%
 
 **Observations**:
 
-- Velocity in a vacuum doesn't have a super clear relationship with temperature. Maximum temperature does generally increase as observed velocity increases, but the temperature values are otherwise spread out.
+- Maximum temperature generally increases as observed velocity increases.
+- Velocity values become more spread out when the temperature is over 70 degrees.
 - When the observed velocity was over 300,000 km/s, the temperature was almost never below 70 degrees.
 - The widest range of velocities observed occurred when the distinctness was 2.
 - When the distinctness was 3, there were the lowest number of occurrences of temperatures below 70 degrees.
@@ -272,7 +273,7 @@ df_q2 %>%
 - All the times when the distinctness was 1 occurred in the first half of the experiment.
 - The three most "extreme" velocity cases occurred when the distinctness was 1 or 2.
 
-The cause behind the difference between Michelson's estimate and the true speed of light could be from equipment limitations or measurement errors. The data shows that there is no clear correlation between temperature and velocity values. When image distinctness was higher, the velocities were not notably closer to the actual value of the speed of light. Each distinctness also had a wide range of velocities measured, so it is hard to definitively determine their effect on Michelson's estimate. Since distinctness and temperature don't offer a clear explanation behind the error in Michelson's estimate, we would have to look at other environmental or experimental factors.
+High temperatures could be a reason for Michelson's error because they seem to lead to more inconsistent readings. There wasn't an extremely clear relationship between temperature and observed velocity, but when temperatures were higher than 70 degrees, the velocity values became more spread out, The maximum values also increased, becoming further from the true speed of light. On the other hand, when image distinctness was higher, the velocities were not notably closer to the actual value of the speed of light. Each distinctness also had a wide range of velocities measured, so it is hard to definitively determine their effect on Michelson's estimate. 
 
 ## Bibliography
 
