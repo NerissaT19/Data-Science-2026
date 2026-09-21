@@ -121,8 +121,29 @@ tribble(
 ### __q1__ Use a combination of `unite` and pivoting to turn `genes` into the same dataframe as `punnett`.
 
 ```{r q1-task}
+genes
+punnett
+?pivot_wider
+
 df_q1 <-
   genes %>%
+  pivot_wider(
+    names_from = parent2,
+    values_from = parent2
+  ) %>%
+  unite(
+    col = "a",
+    parent1, a,
+    sep = "",
+    remove = FALSE
+  ) %>%
+  unite(
+    col = "A",
+    parent1, A,
+    sep = "", 
+    remove = FALSE
+  ) %>%
+  select(parent1, everything())
 ## TODO: pivot and unite here!
 
 df_q1
@@ -164,6 +185,21 @@ separate to tidy these data.
 ```{r q2-task}
 df_q2 <-
   alloys_mod %>%
+  pivot_longer(
+    cols = c("E00", "E45", "mu00", "mu45"),
+    names_to = c("E_angle", "mu_angle"),
+    values_to = "vals"
+  ) %>%
+  separate(
+    col = "E_angle",
+    into = c("E_name", "E_angle"),
+    sep = 1
+  ) %>%
+    separate(
+      col = "mu_angle",
+      into = c("mu_name", "mu_angle"),
+      sep = 2
+    ) 
 ## TODO: pivot and separate here!
 
 df_q2
