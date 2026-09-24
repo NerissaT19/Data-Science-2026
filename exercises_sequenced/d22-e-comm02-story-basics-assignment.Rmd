@@ -146,9 +146,11 @@ diamonds %>%
 
 **Classify**:
 AAA, ABT, or DHY?
+The graph is closest to ABT. 
 
 **Justify**
 Write your justification here!
+Diamond prices relate to carat AND cut, BUT greater carat values tend to result in higher prices rather than better cut quality, THEREFORE carat likely has a greater effect on price than cut. 
 
 ### __q2__ Identify the point on the narrative spectrum, and justify your answer.
 
@@ -171,9 +173,11 @@ diamonds %>%
 
 **Classify**:
 AAA, ABT, or DHY?
+The graph is closed to AAA. 
 
 **Justify**
 Write your justification here!
+The graph has a lot of information on top of each other. The crowding makes it hard to read and gives the same effect as constantly stacking on "ands" to a story.  
 
 ### __q3__ Identify the point on the narrative spectrum, and justify your answer.
 
@@ -194,9 +198,11 @@ diamonds %>%
 
 **Classify**:
 AAA, ABT, or DHY?
+The graph is closest to DHY.
 
 **Justify**
 Write your justification here!
+The graph shows seven different relationships between variables in the dataset. It doesn't follow a specific "story," because it keeps branching off into other narratives. 
 
 ### __q4__ Turn in all your answers via google forms. [Link](https://forms.gle/kHuT5oufUQA7jRWG8)
 
