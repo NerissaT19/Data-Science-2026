@@ -362,8 +362,8 @@ gapminder %>%
   geom_line()
 ```
 
-![](c04-gapminder-assignment_files/figure-gfm/q5-task1-1.png)<!-- --> I
-noticed in the q4 plot that in both the earliest and most recent year in
+![](c04-gapminder-assignment_files/figure-gfm/q5-task1-1.png)<!-- --> 
+I noticed in the q4 plot that in both the earliest and most recent year in
 the dataset, the order of the median GDP per capita for each continent
 was the same. I made this graph with the question in mind of if this
 pattern remained for every year in between.
@@ -392,6 +392,7 @@ gapminder %>%
 ```
 
 ![](c04-gapminder-assignment_files/figure-gfm/q5-task2-1.png)<!-- -->
+
 After looking at the last plot, I started to wonder about other
 variables in the dataset. I wanted to see if life expectancy
 specifically had any relationship with GDP per capita.
