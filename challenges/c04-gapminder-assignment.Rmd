@@ -1,7 +1,7 @@
 ---
 title: "Gapminder"
-author: "(Your name here)"
-date: 2020-
+author: "Nerissa Theisen"
+date: 2026-09-24
 output:
   github_document:
     toc: true
@@ -57,11 +57,13 @@ dataset?
 
 ```{r q0-task}
 ## TASK: Do your "first checks" here!
+glimpse(gapminder)
+summary(gapminder)
 ```
 
 **Observations**:
 
-- Write all variable names here
+- Variables: `country`, `continent`, `year`, `lifeExp`, `pop`, and `gdpPercap`
 
 ### __q1__ Determine the most and least recent years in the `gapminder` dataset.
 
@@ -69,8 +71,13 @@ dataset?
 
 ```{r q1-task}
 ## TASK: Find the largest and smallest values of `year` in `gapminder`
-year_max <- NA_real_
-year_min <- NA_real_
+year_max <- gapminder %>%
+  select(year) %>%
+  max()
+  
+year_min <- gapminder %>%
+  select(year) %>%
+  min()
 ```
 
 Use the following test to check your work.
@@ -96,26 +103,43 @@ You may encounter difficulties in visualizing these data; if so document your ch
 
 ```{r q2-task}
 ## TASK: Create a visual of gdpPercap vs continent
+gapminder %>%
+  filter(year == year_min & gdpPercap < 15000) %>%
+  ggplot(aes(x = continent, y = gdpPercap)) +
+  geom_boxplot() 
 ```
 
 **Observations**:
 
-- Write your observations here
+- Oceania is the only continent with no outliers. 
+- Oceania has the highest median GDP per capita, while Asia and Africa have the lowest       median GDP per capita.
+- Africa's outlier countries have the smallest difference in GDP per capita compared to the   outlier countries of other continents.
+- Europe has the greatest spread of GDP per capita, while Oceania has the least spread.
+- The highest GDP per capita shown on the plot is in Europe.
+- Africa, the Americas, and Asia all have a median GDP per capita under 5000. Oceania is t   the only continent to have a median GDP per capita over 10000.
+- There are no outliers beneath the medians, only above. 
+
+
 
 **Difficulties & Approaches**:
 
-- Write your challenges and your approach to solving them
+- The data are hard to read on a box plot because of one outlier country in Asia. Since it has a much greater GDP per capita than any other country, it widens the axis of the plot and zooms out on the boxes. For continents like Africa and Oceania, the median line blends in with the box outline, and it's harder to tell where it is relative to other medians. I noticed that every other country has a GDP per capita below 15000, so I filtered the data based on that. This widened the view of the boxes and made them easier to interpret. 
 
 ### __q3__ You should have found *at least* three outliers in q2 (but possibly many more!). Identify those outliers (figure out which countries they are).
 
 ```{r q3-task}
 ## TASK: Identify the outliers from q2
+gapminder %>%
+  filter(year == year_min) %>%
+  group_by(continent) %>%
+  arrange(-gdpPercap, .by_group = TRUE)
+
 ```
 
 **Observations**:
 
-- Identify the outlier countries from q2
-  - (Your response here)
+- Identify the outlier countries from q2:
+  - South Africa, Gabon, Angola, United States, Canada, Venezuela, Kuwait, Bahrain, Saudi      Arabia, and Switzerland
 
 *Hint*: For the next task, it's helpful to know a ggplot trick we'll learn in an upcoming exercise: You can use the `data` argument inside any `geom_*` to modify the data that will be plotted *by that geom only*. For instance, you can use this trick to filter a set of points to label:
 
@@ -139,11 +163,38 @@ gapminder %>%
 
 ```{r q4-task}
 ## TASK: Create a visual of gdpPercap vs continent
+gapminder %>% 
+  filter((year == year_min | year == year_max)& gdpPercap < 50000) %>%
+  ggplot(aes(x = continent, y = gdpPercap)) +
+  geom_boxplot() +
+  geom_point(
+    data = . %>% filter(country %in% c(
+      "South Africa",
+      "Gabon",
+      "Angola",
+      "United States",
+      "Canada",
+      "Venezuela",
+      "Kuwait",
+      "Bahrain",
+      "Saudi Arabia",
+      "Switzerland"
+    )),
+    mapping = aes(color = country)
+  ) + 
+  facet_grid(.~ year)
+  
 ```
 
 **Observations**:
 
-- Write your observations here
+- The median GDP per capita of every continent increased in 2007. 
+- In both the minimum and maximum year, the median GDP per capita values in decreasing       order are: Oceania, Europe, Americas, Asia, and Africa.
+- The spread of GDP per capita increased for every continent in 2007.
+- In 1952, every continent had at least one outlier country, except for Oceania. In 2007,    neither Europe nor Oceania had an outlier country. 
+- The number of outlier countries in Africa and Asia increased in 2007. The number           decreased for the Americas and Europe.
+- Gabon, South Africa, Angola, Canada, United States, Bahrain, and Switzerland were          outlier countries in both 1952 and 2007. They all saw increases in GDP per capita.
+- Venezuela and Saudi Arabia were outliers in 1952, but not 2007. However, they both saw an   increase in GDP per capita.
 
 # Your Own EDA
 <!-- -------------------------------------------------- -->
@@ -154,20 +205,57 @@ Now it's your turn! We just went through guided EDA considering the GDP per capi
 
 ```{r q5-task1}
 ## TASK: Your first graph
+gapminder %>%
+  group_by(continent, year) %>%
+  summarize(gdpPercap = median(gdpPercap), .groups = "drop_last") %>%
+  ggplot(aes(x = year, y = gdpPercap, color = continent)) +
+  geom_line()
 ```
+I noticed in the q4 plot that in both the earliest and most recent year in the dataset, the order of the median GDP per capita for each continent was the same. I made this graph with the question in mind of if this pattern remained for every year in between. 
 
-- (Your notes and observations here)
+Observations: 
+- For every year between 1952 and 2007, the median GDP per capita for each continent in      decreasing order was: Oceania, Europe, the Americas, Asia, and Africa.
+- Europe had the largest increase in median GDP per capita between 1952 and 2007.
+- Africa had the smallest increase in median GDP per capita between 1952 and 2007. 
+- Africa has had the least variance in median GDP per capita between 1952 and 2007. 
+- Oceania had a sharp increase in median GDP starting around 1992. Meanwhile, Europe had a   sharp increase starting around 1997 and the Americas had a sharp increase starting around   2002.
+- Asia started off with a median GDP per capita very close to Africa's in 1952, but the      difference has generally been increasing ever since.
 
 ```{r q5-task2}
 ## TASK: Your second graph
+gapminder %>%
+  ggplot(aes(x = lifeExp, y = gdpPercap)) +
+  geom_point()
 ```
+After looking at the last plot, I started to wonder about other variables in the dataset. I wanted to see if life expectancy specifically had any relationship with GDP per capita. 
 
-- (Your notes and observations here)
+Observations: 
+- In the outlier instances where GDP per capita was over 60000, the life expectancy was between 55 and 70.
+- There are only a couple of instances of a life expectancy under 20 years.
+- As life expectancy increases, the upper bound of GDP per capita generally increases.
+- Life expectancies between 70 and 80 have the greatest spread of GDP per capita values.
+- When life expectancy reaches 80 years, there are no instances of a GDP per capita under    15000.
+- The lower bound of GDP per capita starts to increase at a life expectancy of around 65     years. 
+- The GDP per capita of the country with the highest life expectancy is a little over        30000. The country with the highest recorded GDP per capita has a life expectancy of       around 57 years.
 
 ```{r q5-task3}
 ## TASK: Your third graph
+gapminder %>%
+  group_by(continent, year) %>%
+  summarize(
+    gdpPercap = mean(gdpPercap), 
+    lifeExp = mean(lifeExp), 
+    .groups = "drop_last"
+    ) %>%
+  ggplot(aes(x = lifeExp, y = gdpPercap, color = year)) +
+  geom_point() + 
+  facet_grid(continent ~.)
 ```
+It seems that higher life expectancies correlate with higher GDP per capita. However, the last plot didn't take year into account. Higher life expectancy could be caused by new discoveries in the medical field, so I wanted to explore whether life expectancy would increase or not in later years, even if the GDP per capita drops.
 
-- (Your notes and observations here)
-
-
+Observations: 
+- Africa is the only continent where average life expectancy decreased at one point across   the observed years.
+- In the Americas, Asia, Europe, and Oceania, average life expectancy increased every        observed year, even if the average GDP per capita decreased.
+- Asia had the largest increase in average life expectancy between 1952 and 2007.
+- Europe and Oceania had the largest increase in average GDP per capita between 1952 and     2007, but they had the smallest increase in average life expectancy.
+- Africa started and ended with the lowest average GDP per capita and average life           expectancy, while Oceania started and ended with the highest average of each. 
