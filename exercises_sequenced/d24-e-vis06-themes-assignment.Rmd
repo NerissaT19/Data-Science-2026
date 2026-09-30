@@ -25,7 +25,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r q1-task}
 mpg %>%
   ggplot(aes(displ, hwy, color = class)) +
-  geom_point()
+  geom_point() + 
+  theme_void() + 
+  guides(color = "none")
 ```
 
 
@@ -72,12 +74,14 @@ mpg %>%
   labs(
     x = "Engine Displacement (L)",
     y = "Highway Fuel Economy (mpg)"
-  )
+  ) +
+  theme_common()
 ```
 
 **Observations**:
 
 - What changed about the graph when you added `theme_common()`?
+The axis labels and legend became larger when I added `theme_common()`. The plot itself also became more squished, although the numbers on the axis became larger. The background changed from gray with white lines to white with gray lines.
 
 Calling `theme_common()`, along with settings `labs()` and making some smart choices about geoms and annotations is often all you need to make a *really high-quality graph*.
 
@@ -90,7 +94,17 @@ mpg %>%
   ggplot(aes(displ, hwy, color = class)) +
   geom_point() +
   theme(
-    axis.text.x = element_text(size = 32)
+    axis.text.x = element_text(size = 32),
+    axis.text.y = element_text(size = 70),
+    axis.title.x = element_text(margin = margin(6, 7, 8, 9), size = 5, angle = 40),
+    axis.title.y = element_text(margin = margin(1, 2, 3, 4), size = 10, angle = 80),
+    
+    legend.title = element_text(size = 5),
+    legend.text = element_text(size = 30, angle = 150),
+    
+    panel.grid.major = element_line(color = "red"),
+    panel.grid.minor = element_line(color = "yellow"),
+    panel.background = element_rect(fill = "green")
   )
 ```
 
