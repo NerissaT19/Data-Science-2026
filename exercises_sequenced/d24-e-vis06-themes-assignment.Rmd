@@ -94,13 +94,13 @@ mpg %>%
   ggplot(aes(displ, hwy, color = class)) +
   geom_point() +
   theme(
-    axis.text.x = element_text(size = 32),
-    axis.text.y = element_text(size = 70),
+    axis.text.x = element_text(size = 32, angle = 300, color = "blue"),
+    axis.text.y = element_text(size = 70, angle = 85, color = "blue"),
     axis.title.x = element_text(margin = margin(6, 7, 8, 9), size = 5, angle = 40),
     axis.title.y = element_text(margin = margin(1, 2, 3, 4), size = 10, angle = 80),
     
     legend.title = element_text(size = 5),
-    legend.text = element_text(size = 30, angle = 150),
+    legend.text = element_text(size = 30, angle = 150, color = "yellow"),
     
     panel.grid.major = element_line(color = "red"),
     panel.grid.minor = element_line(color = "yellow"),
