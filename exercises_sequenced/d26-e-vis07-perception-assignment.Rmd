@@ -43,6 +43,8 @@ mpg %>%
 **Observations**:
 
 - What are some issues with this graph?
+  - The car manufacturers are sorted alphabetically, not by `cty` value.
+  - Boxes and whiskers similar in length are hard to compare since some are far apart.
 
 ### __q2__ What are some issues with the following graph? *Don't just say* "it's bad"---use concepts from the required reading.
 
@@ -57,6 +59,8 @@ as_tibble(mtcars) %>%
 ```
 
 - What are some issues with this graph?
+  - Some of the circle sizes are only a small difference apart, making it sometimes hard to      tell if one is larger than another.
+  - The car models are sorted alphabetically, not by mileage. 
 
 ### __q3__ What are some issues with the following graph? *Don't just say* "it's bad"---use concepts from the required reading.
 
@@ -68,6 +72,9 @@ diamonds %>%
 ```
 
 - What are some issues with this graph?
+  - It's hard to compare counts in different cut clarities together across bars.
+  - The blue and purple colors are hard to differentiate in smaller areas.
+  - This graph shows a bar chart, when it would be better to put this data on a parallel         coordinate plot.
 
 ### __q4__ What are some issues with the following graph? *Don't just say* "it's bad"---use concepts from the required reading.
 
@@ -81,6 +88,9 @@ diamonds %>%
 ```
 
 - What are some issues with this graph?
+  - Pie charts are usually not an effective way to show data.
+  - It is hard to tell the exact difference between sections close in size. 
+  - We can only make an estimation on count with this chart, so this data would be better in     a table.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
