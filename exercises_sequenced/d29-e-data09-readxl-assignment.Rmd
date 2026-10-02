@@ -233,7 +233,7 @@ What we'll do is continually run `lagfill` until we reduce `countna` to zero. We
 ```{r q4-task}
 ## Choose variables to lag-fill
 ## TASK: Choose the appropriate variables to lag-fill
-vars_lagged <- c()
+vars_lagged <- c("region", "sub_region", "territory", "source", "org", "indicator")
 
 ## NOTE: No need to edit this
 ## Trim head and notes
