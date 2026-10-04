@@ -104,8 +104,8 @@ df_q1
   - The mean velocities in my table are close to, but not exactly the same as, the values      from Michelson's table.
   
 - Why might your table differ from Michelson's?
-  - My table might differ from Michelson's because of the way that velocity was measured.      He estimated the speed of light in a vacuum, so if the original measurements were not      taken in a vacuum, there would be differences in the velocity values that he would want     to take account for. 
-
+  - My table might differ from Michelson's because he, of course, had much less advanced      technology and may have made a few small errors in his calculations of the mean             velocities that my computer did not recreate.
+  
 The `Velocity` values in the dataset are the speed of light *in air*; Michelson
 introduced a couple of adjustments to estimate the speed of light in a vacuum.
 In total, he added $+92$ km/s to his mean estimate for `VelocityVacuum` (from
@@ -235,23 +235,60 @@ Differences
 ```{r}
 ## Creates visualization comparing velocity in a vacuum, temperature, and distinctness 
 df_q2 %>%
-  ggplot(aes(x = VelocityVacuum, fill = factor(Temp))) +
-  geom_bar() +
+  ggplot(aes(x = VelocityVacuum, y = Temp)) +
+  geom_point() +
   facet_grid(Distinctness ~ .)
 ```
 
 ```{r}
 ## Creates visualization comparing velocity in a vacuum and temperature
 df_q2 %>% 
-  ggplot(aes(x = VelocityVacuum, y = Temp)) + 
-  geom_point()
+  group_by(VelocityVacuum) %>%
+  mutate(maxTemp = max(Temp)) %>%
+  ggplot(aes(x = VelocityVacuum, y = Temp)) +
+  geom_point() +
+  geom_line(aes(x = VelocityVacuum, y = maxTemp, color = "red")) + 
+  geom_vline(aes(xintercept = LIGHTSPEED_VACUUM, color = "blue")) + 
+  geom_label(
+    aes(
+    x = LIGHTSPEED_VACUUM - 45, 
+    y = 57, 
+    label = "Speed of Light", 
+    color = "blue")
+    ) +
+  geom_vline(aes(xintercept = LIGHTSPEED_MICHELSON, color = "green")) +
+  geom_label(
+    aes(
+      x = LIGHTSPEED_MICHELSON - 60, 
+      y = 57, 
+      label = "Michelson's Estimate", 
+      color = "green")
+    ) +
+  theme(legend.position = "none")
 ```
 
 ```{r}
 ## Creates visualization comparing velocity in a vacuum and distinctness
 df_q2 %>% 
-  ggplot(aes(x = VelocityVacuum, fill = factor(Distinctness))) + 
-  geom_bar() 
+  ggplot(aes(x = Distinctness, y = VelocityVacuum)) +
+  geom_boxplot() +
+  geom_hline(aes(yintercept = LIGHTSPEED_VACUUM, color = "red")) +
+  geom_label(
+    aes(
+      x = 0.75, 
+      y = LIGHTSPEED_VACUUM - 25, 
+      color = "red", 
+      label = "Speed of Light")
+    ) +
+  geom_hline(aes(yintercept = LIGHTSPEED_MICHELSON, color = "blue")) + 
+  geom_label(
+    aes(
+      x = 0.8, 
+      y = LIGHTSPEED_MICHELSON + 25, 
+      color = "blue", 
+      label = "Michelson's Estimate")
+    ) +
+  theme(legend.position = "none")
 ```
 
 ```{r}
@@ -263,7 +300,8 @@ df_q2 %>%
 
 **Observations**:
 
-- Maximum temperature generally increases as observed velocity increases.
+- Temperature only reaches 90 degrees when distinctness is 2 or 3. 
+- The lowest temperature recorded occurred when the distinctness was 1. The highest temperature recorded occurred when the distinctness was 2. 
 - Velocity values become more spread out when the temperature is over 70 degrees.
 - When the observed velocity was over 300,000 km/s, the temperature was almost never below 70 degrees.
 - The widest range of velocities observed occurred when the distinctness was 2.
@@ -272,8 +310,11 @@ df_q2 %>%
 - The most common distinctness was 3, while the least common distinctness was 1. 
 - All the times when the distinctness was 1 occurred in the first half of the experiment.
 - The three most "extreme" velocity cases occurred when the distinctness was 1 or 2.
+- The median velocity was lowest when the distinctness was 1 and highest when the distinctness was 3. 
+- The median velocity was closest to Michelson's estimate when the distinctness was 2.
+- The median velocity was closest to the true value of the speed of light when the distinctness was 1.
 
-High temperatures could be a reason for Michelson's error because they seem to lead to more inconsistent readings. There wasn't an extremely clear relationship between temperature and observed velocity, but when temperatures were higher than 70 degrees, the velocity values became more spread out, The maximum values also increased, becoming further from the true speed of light. On the other hand, when image distinctness was higher, the velocities were not notably closer to the actual value of the speed of light. Each distinctness also had a wide range of velocities measured, so it is hard to definitively determine their effect on Michelson's estimate. 
+There is another pattern in the data that could explain the difference between Michelson's estimate and the true speed of light. The distinctness of the images has a noticeable effect on the measured velocity values. Interestingly, even though 1 is considered "poor" and 3 is considered "good," as the distinctness goes from 1 to 3, the median velocity increases and gets farther from the true speed of light. Since the majority of Michelson's measurements were taken at a distinctness of 2 or 3, his data was skewed towards the higher side and not as accurate as it could have been. 
 
 ## Bibliography
 

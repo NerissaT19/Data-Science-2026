@@ -157,22 +157,23 @@ df_q1
 | 2            |  39 |     299858.5 |
 | 1            |  15 |     299808.0 |
 
-**Observations**: - Write your observations here! - 3 is the most common
-distinctness, while 1 is the least common. - The mean velocities when
-distinctness is 2 or 3 are close to each other, being 3.2 km/s apart.
-However, the mean velocity when distinctness is 1 is about 50 km/s apart
-from the other mean velocities. - The highest distinctness has the
-highest number of occurrences and the highest mean velocity, while the
-lowest distinctness has the lowest of occurrences and the lowest mean
-velocity. - The mean velocities in my table are close to, but not
-exactly the same as, the values from Michelson’s table.
+**Observations**: 
+- Write your observations here! 
+- 3 is the most common distinctness, while 1 is the least common. 
+- The mean velocities when distinctness is 2 or 3 are close to each other, 
+being 3.2 km/s apart. However, the mean velocity when distinctness is 1 is about 
+50 km/s apart from the other mean velocities. 
+- The highest distinctness has the highest number of occurrences and the highest 
+mean velocity, while the lowest distinctness has the lowest of occurrences and 
+the lowest mean velocity. 
+- The mean velocities in my table are close to, but not exactly the same as, the 
+values from Michelson’s table.
 
 - Why might your table differ from Michelson’s?
-  - My table might differ from Michelson’s because of the way that
-    velocity was measured. He estimated the speed of light in a vacuum,
-    so if the original measurements were not taken in a vacuum, there
-    would be differences in the velocity values that he would want to
-    take account for.
+  - My table might differ from Michelson’s because he, of course, had
+    much less advanced technology and may have made a few small errors
+    in his calculations of the mean velocities that my computer did not
+    recreate.
 
 The `Velocity` values in the dataset are the speed of light *in air*;
 Michelson introduced a couple of adjustments to estimate the speed of
@@ -243,9 +244,10 @@ LIGHTSPEED_PM                             ## Plus/minus bounds of Michelson's es
 
     ## [1] 51
 
-**Observations**: - Is Michelson’s estimate of the error (his
-uncertainty) greater or less than the true error? - Michelson’s estimate
-of the error is less than the true error.
+**Observations**: 
+- Is Michelson’s estimate of the error (his uncertainty) greater or less than 
+the true error? 
+  - Michelson’s estimate of the error is less than the true error.
 
 - Make a quantitative comparison between Michelson’s uncertainty and his
   error.
@@ -331,30 +333,34 @@ df_q2 %>%
 
 ![](c02-michelson-assignment_files/figure-gfm/q4-cf-real-simulated-1.png)<!-- -->
 
-**Observations**: Similarities - Both datasets have peaks and valleys in
-the mean around the same dates. - There are measurements that are
-outside the upper and lower control limits in both the real and
-simulated data.
+**Observations**: 
+Similarities 
+- Both datasets have peaks and valleys in the mean around the same dates. 
+- There are measurements that are outside the upper and lower control limits in 
+both the real and simulated data.
 
-Differences - The gray line for the real data has more areas outside of
-the control limits than the gray line for the simulated data. - The gray
-line for the real data has areas outside of both the upper and lower
-control limits, while the gray line for the simulated data only has
-areas outside of the upper control limit. - The peaks in the mean are
-higher in the real data before June 23, and higher in the simulated data
-after June 23. - The mean in the real data starts and ends very close to
-the center line, while the mean in the simulated data starts below the
-center line and ends slightly above it. - The highest measurement in the
-real data is greater than in the simulated data. Similarly, the lowest
-measurement in the real data is lesser than in the simulated data.
+Differences 
+- The gray line for the real data has more areas outside of the control limits 
+than the gray line for the simulated data. 
+- The gray line for the real data has areas outside of both the upper and lower
+control limits, while the gray line for the simulated data only has areas 
+outside of the upper control limit. 
+- The peaks in the mean are higher in the real data before June 23, and higher 
+in the simulated data after June 23. 
+- The mean in the real data starts and ends very close to the center line, while 
+the mean in the simulated data starts below the center line and ends slightly 
+above it. 
+- The highest measurement in the real data is greater than in the simulated 
+data. Similarly, the lowest measurement in the real data is lesser than in the 
+simulated data.
 
 ### **q5** You have access to a few other variables. Construct a **at least three** visualizations of `VelocityVacuum` against these other factors. Are there other patterns in the data that might help explain the difference between Michelson’s estimate and `LIGHTSPEED_VACUUM`?
 
 ``` r
 ## Creates visualization comparing velocity in a vacuum, temperature, and distinctness 
 df_q2 %>%
-  ggplot(aes(x = VelocityVacuum, fill = factor(Temp))) +
-  geom_bar() +
+  ggplot(aes(x = VelocityVacuum, y = Temp)) +
+  geom_point() +
   facet_grid(Distinctness ~ .)
 ```
 
@@ -363,18 +369,71 @@ df_q2 %>%
 ``` r
 ## Creates visualization comparing velocity in a vacuum and temperature
 df_q2 %>% 
-  ggplot(aes(x = VelocityVacuum, y = Temp)) + 
-  geom_point()
+  group_by(VelocityVacuum) %>%
+  mutate(maxTemp = max(Temp)) %>%
+  ggplot(aes(x = VelocityVacuum, y = Temp)) +
+  geom_point() +
+  geom_line(aes(x = VelocityVacuum, y = maxTemp, color = "red")) + 
+  geom_vline(aes(xintercept = LIGHTSPEED_VACUUM, color = "blue")) + 
+  geom_label(
+    aes(
+    x = LIGHTSPEED_VACUUM - 45, 
+    y = 57, 
+    label = "Speed of Light", 
+    color = "blue")
+    ) +
+  geom_vline(aes(xintercept = LIGHTSPEED_MICHELSON, color = "green")) +
+  geom_label(
+    aes(
+      x = LIGHTSPEED_MICHELSON - 60, 
+      y = 57, 
+      label = "Michelson's Estimate", 
+      color = "green")
+    ) +
+  theme(legend.position = "none")
 ```
+
+    ## Warning in geom_label(aes(x = LIGHTSPEED_VACUUM - 45, y = 57, label = "Speed of Light", : All aesthetics have length 1, but the data has 100 rows.
+    ## ℹ Please consider using `annotate()` or provide this layer with data containing
+    ##   a single row.
+
+    ## Warning in geom_label(aes(x = LIGHTSPEED_MICHELSON - 60, y = 57, label = "Michelson's Estimate", : All aesthetics have length 1, but the data has 100 rows.
+    ## ℹ Please consider using `annotate()` or provide this layer with data containing
+    ##   a single row.
 
 ![](c02-michelson-assignment_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 ## Creates visualization comparing velocity in a vacuum and distinctness
 df_q2 %>% 
-  ggplot(aes(x = VelocityVacuum, fill = factor(Distinctness))) + 
-  geom_bar() 
+  ggplot(aes(x = Distinctness, y = VelocityVacuum)) +
+  geom_boxplot() +
+  geom_hline(aes(yintercept = LIGHTSPEED_VACUUM, color = "red")) +
+  geom_label(
+    aes(
+      x = 0.75, 
+      y = LIGHTSPEED_VACUUM - 25, 
+      color = "red", 
+      label = "Speed of Light")
+    ) +
+  geom_hline(aes(yintercept = LIGHTSPEED_MICHELSON, color = "blue")) + 
+  geom_label(
+    aes(
+      x = 0.8, 
+      y = LIGHTSPEED_MICHELSON + 25, 
+      color = "blue", 
+      label = "Michelson's Estimate")
+    ) +
+  theme(legend.position = "none")
 ```
+
+    ## Warning in geom_label(aes(x = 0.75, y = LIGHTSPEED_VACUUM - 25, color = "red", : All aesthetics have length 1, but the data has 100 rows.
+    ## ℹ Please consider using `annotate()` or provide this layer with data containing
+    ##   a single row.
+
+    ## Warning in geom_label(aes(x = 0.8, y = LIGHTSPEED_MICHELSON + 25, color = "blue", : All aesthetics have length 1, but the data has 100 rows.
+    ## ℹ Please consider using `annotate()` or provide this layer with data containing
+    ##   a single row.
 
 ![](c02-michelson-assignment_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
@@ -389,8 +448,9 @@ df_q2 %>%
 
 **Observations**:
 
-- Maximum temperature generally increases as observed velocity
-  increases.
+- Temperature only reaches 90 degrees when distinctness is 2 or 3.
+- The lowest temperature recorded occurred when the distinctness was 1.
+  The highest temperature recorded occurred when the distinctness was 2.
 - Velocity values become more spread out when the temperature is over 70
   degrees.
 - When the observed velocity was over 300,000 km/s, the temperature was
@@ -407,17 +467,22 @@ df_q2 %>%
   of the experiment.
 - The three most “extreme” velocity cases occurred when the distinctness
   was 1 or 2.
+- The median velocity was lowest when the distinctness was 1 and highest
+  when the distinctness was 3.
+- The median velocity was closest to Michelson’s estimate when the
+  distinctness was 2.
+- The median velocity was closest to the true value of the speed of
+  light when the distinctness was 1.
 
-High temperatures could be a reason for Michelson’s error because they
-seem to lead to more inconsistent readings. There wasn’t an extremely
-clear relationship between temperature and observed velocity, but when
-temperatures were higher than 70 degrees, the velocity values became
-more spread out, The maximum values also increased, becoming further
-from the true speed of light. On the other hand, when image distinctness
-was higher, the velocities were not notably closer to the actual value
-of the speed of light. Each distinctness also had a wide range of
-velocities measured, so it is hard to definitively determine their
-effect on Michelson’s estimate.
+There is another pattern in the data that could explain the difference
+between Michelson’s estimate and the true speed of light. The
+distinctness of the images has a noticeable effect on the measured
+velocity values. Interestingly, even though 1 is considered “poor” and 3
+is considered “good,” as the distinctness goes from 1 to 3, the median
+velocity increases and gets farther from the true speed of light. Since
+the majority of Michelson’s measurements were taken at a distinctness of
+2 or 3, his data was skewed towards the higher side and not as accurate
+as it could have been.
 
 ## Bibliography
 
