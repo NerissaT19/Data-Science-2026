@@ -159,15 +159,15 @@ df_q1
 
 **Observations**: 
 - Write your observations here! 
-- 3 is the most common distinctness, while 1 is the least common. 
-- The mean velocities when distinctness is 2 or 3 are close to each other, 
-being 3.2 km/s apart. However, the mean velocity when distinctness is 1 is about 
-50 km/s apart from the other mean velocities. 
-- The highest distinctness has the highest number of occurrences and the highest 
-mean velocity, while the lowest distinctness has the lowest of occurrences and 
-the lowest mean velocity. 
-- The mean velocities in my table are close to, but not exactly the same as, the 
-values from Michelson’s table.
+  - 3 is the most common distinctness, while 1 is the least common. 
+  - The mean velocities when distinctness is 2 or 3 are close to each other, 
+    being 3.2 km/s apart. However, the mean velocity when distinctness is 1 is 
+    about 50 km/s apart from the other mean velocities. 
+  - The highest distinctness has the highest number of occurrences and the 
+    highest mean velocity, while the lowest distinctness has the lowest of 
+    occurrences and the lowest mean velocity. 
+  - The mean velocities in my table are close to, but not exactly the same as, 
+    the values from Michelson’s table.
 
 - Why might your table differ from Michelson’s?
   - My table might differ from Michelson’s because he, of course, had
@@ -334,6 +334,7 @@ df_q2 %>%
 ![](c02-michelson-assignment_files/figure-gfm/q4-cf-real-simulated-1.png)<!-- -->
 
 **Observations**: 
+
 Similarities 
 - Both datasets have peaks and valleys in the mean around the same dates. 
 - There are measurements that are outside the upper and lower control limits in 
