@@ -1,7 +1,7 @@
 ---
 title: "COVID-19"
-author: "(Your name here)"
-date: 2020-
+author: "Nerissa Theisen"
+date: 2020-10-08
 output:
   github_document:
     toc: true
@@ -37,7 +37,6 @@ Make sure to commit both the challenge report (`report.md` file) and supporting 
 
 ```{r setup}
 library(tidyverse)
-
 ```
 
 *Background*: [COVID-19](https://en.wikipedia.org/wiki/Coronavirus_disease_2019) is the disease caused by the virus SARS-CoV-2. In 2020 it became a global pandemic, leading to huge loss of life and tremendous disruption to society. The New York Times (as of writing) publishes up-to-date data on the progression of the pandemic across the United States---we will study these data in this challenge.
@@ -79,7 +78,8 @@ That's the high-level view; now let's dig into the details.
 
 ```{r q1-task}
 ## TASK: Load the census bureau data with the following tibble name.
-df_pop <- NA
+df_pop <- read_csv("./data/ACSDT5Y2018.B01003-Data.csv", skip = 1) %>%
+  select(-"...5")
 ```
 
 *Note*: You can find information on 1-year, 3-year, and 5-year estimates [here](https://www.census.gov/programs-surveys/acs/guidance/estimates.html). The punchline is that 5-year estimates are more reliable but less current.
@@ -95,7 +95,7 @@ The New York Times is publishing up-to-date data on COVID-19 on [GitHub](https:/
 
 ```{r q2-task}
 ## TASK: Find the URL for the NYT covid-19 county-level data
-url_counties <- NA_character_
+url_counties <- "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 ```
 
 Once you have the url, the following code will download a local copy of the data, then load the data into R.
@@ -136,7 +136,8 @@ To join these datasets, we'll need to use [FIPS county codes](https://en.wikiped
 
 ```{r q3-task}
 ## TASK: Create a `fips` column by extracting the county code
-df_q3 <- NA
+df_q3 <- df_pop %>%
+  mutate(fips = str_remove(Geography, "^.*[US]"))
 ```
 
 Use the following test to check your answer.
@@ -156,7 +157,7 @@ print("Very good!")
 
 ```{r q4-task}
 ## TASK: Join df_covid and df_q3 by fips.
-df_q4 <- NA
+df_q4 <- left_join(df_covid, df_q3)
 ```
 
 Use the following test to check your answer.
@@ -219,8 +220,13 @@ Now that we've done the hard work of loading and wrangling the data, we can fina
 
 ```{r q5-task}
 ## TASK: Normalize cases and deaths
-df_normalized <-
-  df_data
+df_normalized <- df_data %>%
+  mutate(
+    cases_per100k = (cases/population) * 100000,
+    deaths_per100k = (deaths/population) * 100000
+  )
+
+df_normalized
 ```
 
 You may use the following test to check your work.
@@ -289,12 +295,20 @@ Compute the mean and standard deviation for `cases_per100k` and `deaths_per100k`
 
 ```{r q6-task}
 ## TASK: Compute mean and sd for cases_per100k and deaths_per100k
+df_normalized %>%
+  summarize(
+    mean_cases = mean(cases_per100k, na.rm = TRUE),
+    mean_deaths = mean(deaths_per100k, na.rm = TRUE),
+    sd_cases = sd(cases_per100k, na.rm = TRUE),
+    sd_deaths = sd(deaths_per100k, na.rm = TRUE)
+    )
 ```
 
 - Which rows did you pick?
-  - (Your response here)
+  - I chose the rows in the dataset that didn't have an NA value for `cases_per100k` or        `deaths_per100k`.
+  
 - Why?
-  - (Your response here)
+  - If I had kept the rows with a value of NA in, it would have set my mean and standard       deviation values to NA as well. 
 
 ### __q7__ Find and compare the top 10
 
@@ -302,15 +316,30 @@ Find the top 10 counties in terms of `cases_per100k`, and the top 10 in terms of
 
 ```{r q7-task}
 ## TASK: Find the top 10 max cases_per100k counties; report populations as well
+df_normalized %>%
+  arrange(-cases_per100k) %>%
+  filter(dense_rank(desc(cases_per100k)) <= 10) %>%
+  select(date, county, state, cases, population, cases_per100k)
 
 ## TASK: Find the top 10 deaths_per100k counties; report populations as well
+df_normalized %>%
+  arrange(-deaths_per100k) %>%
+  filter(dense_rank(desc(deaths_per100k)) <= 10) %>%
+  select(date, county, state, deaths, population, deaths_per100k)
 ```
 
 **Observations**:
 
-- (Note your observations here!)
+- The top 10 cases per 100k all came from Loving, Texas. The top 10 deaths per 100k came     from three different counties. 
+- All of the largest cases per 100k values occurred in 2022. Most of the largest deaths per   100k values did so as well, but some occurred in 2021. 
+- The top 10 cases per 100k were observed in a county with a small population, at 102        people.
+- The amount of cases in Loving, Texas outnumbered the population. 
+- The largest deaths per 100k value occurred in a county that only saw 9 deaths. However,    the county has a small population of 662.
+- The top 10 deaths per 100k values were all over 1000, while the mean I found in q6 was     174.
+- The top 10 cases per 100k values were close to 200k, while the mean I found in q6 was      only 9975.
+
 - When did these "largest values" occur?
-  - (Your response here)
+  - The largest values for cases per 100k all occurred in Loving, Texas in the Spring of       2022. The largest values for deaths per 100k occurred in 2021 and 2022, in three           different counties with populations between 662 and 6638.
 
 ## Self-directed EDA
 <!-- ------------------------- -->
@@ -329,12 +358,54 @@ Find the top 10 counties in terms of `cases_per100k`, and the top 10 in terms of
 
 **DO YOUR OWN ANALYSIS HERE**
 
+```{r}
+df_normalized %>%
+  filter(state == "Massachusetts", county == "Middlesex") %>%
+  arrange(desc(date))
+
+df_normalized %>%
+  filter(state == "Massachusetts", !(county == "Unknown")) %>%
+  group_by(county, date) %>%
+  ggplot(aes(x = date, y = deaths, color = county)) +
+  geom_line()
+```
+Since I am from the most populous county in Rhode Island, I wanted to compare how the most populous counties in all of the New England states fared during COVID. While exploring the data from New England states, I noticed that there was a strange dip in deaths in Massachusetts around March of 2022. I looked it up (https://www.boston.com/news/coronavirus/2022/03/10/covid-19-deaths-massachusetts-adjusted-count/), and apparently this was due to a recount in deaths attributed to COVID-19 in that month. 400 deaths were newly attributed to COVID, but, at the same time, 4,081 previously counted deaths were removed. At first, Massachusetts counted anyone who had a COVID diagnosis 60 days before their death, even if the virus wasn't listed as their cause of death. The new definition reduced the timeframe to 30 days. 
+
+```{r}
+df_normalized %>%
+  filter(state == c(
+    "Maine",
+    "New Hampshire",
+    "Vermont",
+    "Massachusetts",
+    "Rhode Island",
+    "Connecticut"
+    ), county == c(
+      "Cumberland",
+      "Hillsborough",
+      "Chittenden",
+      "Middlesex",
+      "Providence",
+      "Fairfield"
+    )) %>%
+  group_by(date, state) %>%
+  ggplot(aes(x = date, y = deaths, color = county)) +
+  geom_line() + 
+  theme_minimal() + 
+  labs(
+    x = "date",
+    title = "COVID Deaths in the Most Populous Counties of Each New England State"
+    ) 
+
+```
+Looking at the data from the most populous counties of every state in New England, we can see that Middlesex county in Massachusetts is the only one to ever have a major drop in death count. No other county was involved in a recount of similar scale. It is also notable that, aside from Chittenden county and the Middlesex recount, the counties all followed a similar pattern with where there were spikes and flattening in death counts. 
+
 ### Aside: Some visualization tricks
 <!-- ------------------------- -->
 
 These data get a little busy, so it's helpful to know a few `ggplot` tricks to help with the visualization. Here's an example focused on Massachusetts.
 
-```{r ma-example}
+```{r ma-example, eval = FALSE}
 ## NOTE: No need to change this; just an example
 df_normalized %>%
   filter(
