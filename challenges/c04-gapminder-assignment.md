@@ -303,7 +303,7 @@ variables; think about using different aesthetics or facets.
 ``` r
 ## TASK: Create a visual of gdpPercap vs continent
 gapminder %>% 
-  filter((year == year_min | year == year_max)& gdpPercap < 50000) %>%
+  filter((year == year_min | year == year_max)) %>%
   ggplot(aes(x = continent, y = gdpPercap)) +
   geom_boxplot() +
   geom_point(
@@ -321,6 +321,7 @@ gapminder %>%
     )),
     mapping = aes(color = country)
   ) + 
+  scale_y_log10() +
   facet_grid(.~ year)
 ```
 
@@ -332,10 +333,10 @@ gapminder %>%
 - In both the minimum and maximum year, the median GDP per capita values
   in decreasing order are: Oceania, Europe, Americas, Asia, and Africa.
 - The spread of GDP per capita increased for every continent in 2007.
-- In 1952, every continent had at least one outlier country, except for
-  Oceania. In 2007, neither Europe nor Oceania had an outlier country.
-- The number of outlier countries in Africa and Asia increased in 2007.
-  The number decreased for the Americas and Europe.
+- In both 1952 and 2007, every continent had at least one outlier
+  country, except for Oceania.
+- The number of outlier countries decreased or stayed the same for every
+  continent between 1952 and 2007.
 - Gabon, South Africa, Angola, Canada, United States, Bahrain, and
   Switzerland were outlier countries in both 1952 and 2007. They all saw
   increases in GDP per capita.
@@ -366,22 +367,27 @@ gapminder %>%
 
 I noticed in the q4 plot that in both the earliest and most recent year in
 the dataset, the order of the median GDP per capita for each continent
-was the same. I made this graph with the question in mind of if this
-pattern remained for every year in between.
+was the same.
+
+Question: Does the order of the median GDP per capita for each continent
+remain the same for every year in the dataset?
 
 Observations: 
+
 - For every year between 1952 and 2007, the median GDP per capita for each 
   continent in decreasing order was: Oceania, Europe, the Americas, Asia, and 
   Africa. 
-- Europe had the largest increase in median GDP per capita between 1952 and 
-  2007. 
-- Africa had the smallest increase in median GDP per capita between 1952 and 
-  2007. 
-- Africa has had the least variance in median GDP per capita between 1952 and 
-  2007. 
+
+- Europe had the largest increase in median GDP per capita between 1952 and 2007. 
+
+- Africa had the smallest increase in median GDP per capita between 1952 and 2007. 
+
+- Africa has had the least variance in median GDP per capita between 1952 and 2007. 
+
 - Oceania had a sharp increase in median GDP starting around 1992. Meanwhile,
   Europe had a sharp increase starting around 1997 and the Americas had a
   sharp increase starting around 2002. 
+
 - Asia started off with a median GDP per capita very close to Africa’s in 1952, 
   but the difference has generally been increasing ever since.
 
@@ -394,23 +400,32 @@ gapminder %>%
 
 ![](c04-gapminder-assignment_files/figure-gfm/q5-task2-1.png)<!-- -->
 
-After looking at the last plot, I started to wonder about other
-variables in the dataset. I wanted to see if life expectancy
-specifically had any relationship with GDP per capita.
+After looking at the last plot, I started to wonder about the
+relationship between other variables in the dataset.
+
+Question: Does life expectancy have any clear relationship with GDP per
+capita?
 
 Observations: 
+
 - In the outlier instances where GDP per capita was over 60000, the life 
   expectancy was between 55 and 70. 
+
 - There are only a couple of instances of a life expectancy under 20 years. 
+
 - As life expectancy increases, the upper bound of GDP per capita generally
   increases. 
-- Life expectancies between 70 and 80 have the greatest spread of GDP per 
-  capita values. 
+
+- Life expectancies between 70 and 80 have the greatest spread of GDP per capita 
+  values. 
+
 - When life expectancy reaches 80 years, there are no instances of a GDP per 
   capita under 15000. 
+
 - The lower bound of GDP per capita starts to increase at a life expectancy of
   around 65 years. 
-- The GDP per capita of the country with the highest life expectancy is a little
+
+- The GDP per capita of the country with the highest life expectancy is a little 
   over 30000. The country with the highest recorded GDP per capita has a life 
   expectancy of around 57 years.
 
@@ -432,19 +447,25 @@ gapminder %>%
 
 It seems that higher life expectancies correlate with higher GDP per
 capita. However, the last plot didn’t take year into account. Higher
-life expectancy could be caused by new discoveries in the medical field,
-so I wanted to explore whether life expectancy would increase or not in
-later years, even if the GDP per capita drops.
+life expectancy could also be caused by factors like new discoveries in
+the medical field.
+
+Question: Does life expectancy increase as the years go on, even if GDP
+per capita decreases?
 
 Observations: 
+
 - Africa is the only continent where average life expectancy decreased at one 
   point across the observed years. 
+  
 - In the Americas, Asia, Europe, and Oceania, average life expectancy increased
-  every observed year, even if the average GDP per capita decreased. 
-- Asia had the largest increase in average life expectancy between 1952 and 
-  2007. 
+  every observed year, even if the average GDP per capita decreased.
+  
+- Asia had the largest increase in average life expectancy between 1952 and 2007. 
+  
 - Europe and Oceania had the largest increase in average GDP per capita between 
   1952 and 2007, but they had the smallest increase in average life expectancy. 
+  
 - Africa started and ended with the lowest average GDP per capita and average 
   life expectancy, while Oceania started and ended with the highest average of 
   each.
