@@ -86,6 +86,10 @@ library(tidyverse)
     ## ✖ dplyr::lag()    masks stats::lag()
     ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
+``` r
+library(patchwork)
+```
+
 *Background*: In 1946, scientists at the Bureau of Standards tested a
 number of Aluminum plates to determine their
 [elasticity](https://en.wikipedia.org/wiki/Elastic_modulus) and
@@ -251,15 +255,50 @@ summary(df_stang_long)
     ##  3rd Qu.:0.08100   Max.nchar: 7   3rd Qu.:90   3rd Qu.:10500   3rd Qu.:0.3277  
     ##  Max.   :0.08100                  Max.   :90   Max.   :10700   Max.   :0.3310
 
+``` r
+df_stang_long %>%
+  distinct(alloy)
+```
+
+    ## # A tibble: 1 × 1
+    ##   alloy  
+    ##   <chr>  
+    ## 1 al_24st
+
+``` r
+df_stang_long %>%
+  distinct(angle)
+```
+
+    ## # A tibble: 3 × 1
+    ##   angle
+    ##   <int>
+    ## 1     0
+    ## 2    45
+    ## 3    90
+
+``` r
+df_stang_long %>%
+  distinct(thick)
+```
+
+    ## # A tibble: 4 × 1
+    ##   thick
+    ##   <dbl>
+    ## 1 0.022
+    ## 2 0.032
+    ## 3 0.064
+    ## 4 0.081
+
 **Observations**:
 
 - Is there “one true value” for the material properties of Aluminum?
   - There is not “one true value” for the material properties of
     Aluminum.
 - How many aluminum alloys are in this dataset? How do you know?
-  - There is only one aluminum alloy in the dataset. I know this because
-    the summary of the dataset says that there’s only one unique value
-    in the `alloy` column.
+  - There is one aluminum alloy in the dataset. I know this because
+    using the distinct() function shows that there is only one unique
+    `alloy` value.
 - What angles were tested?
   - 0 degrees, 45 degrees, and 90 degrees were tested.
 - What thicknesses were tested?
@@ -277,9 +316,15 @@ summary(df_stang_long)
 ``` r
 ## TASK: Investigate your question from q1 here
 ## Creates visualization that compares E, nu, and angle
-df_stang_long %>%
-  ggplot(aes(x = E, y = nu, color = factor(angle))) +
+E_graph <- df_stang_long %>%
+  ggplot(aes(x = angle, y = E, color = factor(thick))) +
   geom_point()
+
+nu_graph <- df_stang_long %>%
+  ggplot(aes(x = angle, y = nu, color = factor(thick))) +
+  geom_point()
+
+E_graph + nu_graph
 ```
 
 ![](c03-stang-assignment_files/figure-gfm/q3-task-1.png)<!-- -->
@@ -287,12 +332,12 @@ df_stang_long %>%
 **Observations**:
 
 - (Address your question from q1 here)
-  - The dataset doesn’t give an answer to my question. My visualization
-    shows that angle doesn’t have much of a relationship with either
-    elasticity or Poisson’s ratio in aluminum. There are a variety of
-    angles in each area of the plot, so no clear pattern is established.
-    It would be helpful to have data on elasticity and Poisson’s ratio
-    at more angles to see if a pattern starts to emerge.
+  - The dataset is able to answer my question. However, it suggests that
+    angle doesn’t have an effect on either elasticity or Poisson’s
+    ratio. In both cases, the values were spread across about the same
+    range no matter the angle. Elasticity seemed to be affected more by
+    thickness if anything, as points on the plot were generally grouped
+    with others of the same thickness.
 
 ### **q4** Consider the following statement:
 
@@ -326,7 +371,6 @@ df_stang_long %>%
     0.022, the smallest thickness in the dataset. Although it is not the
     most definite pattern, lower elasticity tends to correlate with
     greater thickness.
-    
 - Is this evidence *conclusive* one way or another?
   - This evidence is not conclusive. Although there is a general pattern
     of greater thickness meaning lower elasticity seen for thicknesses

@@ -39,6 +39,7 @@ Make sure to commit both the challenge report (`report.md` file) and supporting 
 
 ```{r setup}
 library(tidyverse)
+library(patchwork)
 ```
 
 *Background*: In 1946, scientists at the Bureau of Standards tested a number of Aluminum plates to determine their [elasticity](https://en.wikipedia.org/wiki/Elastic_modulus) and [Poisson's ratio](https://en.wikipedia.org/wiki/Poisson%27s_ratio). These are key quantities used in the design of structural members, such as aircraft skin under [buckling loads](https://en.wikipedia.org/wiki/Buckling). These scientists tested plats of various thicknesses, and at different angles with respect to the [rolling](https://en.wikipedia.org/wiki/Rolling_(metalworking)) direction.
@@ -113,6 +114,15 @@ print("Very good!")
 ## Performs basic checks on the aluminum data
 glimpse(df_stang_long)
 summary(df_stang_long)
+
+df_stang_long %>%
+  distinct(alloy)
+
+df_stang_long %>%
+  distinct(angle)
+
+df_stang_long %>%
+  distinct(thick)
 ```
 
 **Observations**:
@@ -121,7 +131,7 @@ summary(df_stang_long)
   - There is not "one true value" for the material properties of Aluminum. 
   
 - How many aluminum alloys are in this dataset? How do you know?
-  - There is only one aluminum alloy in the dataset. I know this because the summary of the     dataset says that there's only one unique value in the `alloy` column.
+  - There is one aluminum alloy in the dataset. I know this because using the                   distinct() function shows that there is only one unique `alloy` value.
   
 - What angles were tested?
   - 0 degrees, 45 degrees, and 90 degrees were tested.
@@ -140,16 +150,21 @@ summary(df_stang_long)
 ```{r q3-task}
 ## TASK: Investigate your question from q1 here
 ## Creates visualization that compares E, nu, and angle
-df_stang_long %>%
-  ggplot(aes(x = E, y = nu, color = factor(angle))) +
+E_graph <- df_stang_long %>%
+  ggplot(aes(x = angle, y = E, color = factor(thick))) +
   geom_point()
-  
+
+nu_graph <- df_stang_long %>%
+  ggplot(aes(x = angle, y = nu, color = factor(thick))) +
+  geom_point()
+
+E_graph + nu_graph
 ```
 
 **Observations**:
 
 - (Address your question from q1 here)
-  - The dataset doesn't give an answer to my question. My visualization shows that angle       doesn't have much of a relationship with either elasticity or Poisson's ratio in           aluminum. There are a variety of angles in each area of the plot, so no clear pattern      is established. It would be helpful to have data on elasticity and Poisson's ratio at      more angles to see if a pattern starts to emerge.
+  - The dataset is able to answer my question. However, it suggests that angle doesn't have     an effect on either elasticity or Poisson's ratio. In both cases, the values were spread     across about the same range no matter the angle. Elasticity seemed to be affected more      by thickness if anything, as points on the plot were generally grouped with others of       the same thickness. 
 
 ### __q4__ Consider the following statement:
 
@@ -169,10 +184,10 @@ df_stang_long %>%
 **Observations**:
 
 - Does this graph support or contradict the claim above?
-  - This graph contradicts the claim above. The lowest elasticity values shown on the graph     occur specifically when aluminum has a thickness of 0.081, the largest thickness in the     dataset. The highest elasticity values generally occur when aluminum has a thickness of     0.022, the smallest thickness in the dataset. Although it is not the most definite         pattern, lower elasticity tends to correlate with greater thickness.
+  - This graph contradicts the claim above. The lowest elasticity values shown on the graph     occur specifically when aluminum has a thickness of 0.081, the largest thickness in the     dataset. The highest elasticity values generally occur when aluminum has a thickness of     0.022, the smallest thickness in the dataset. Although it is not the most definite          pattern, lower elasticity tends to correlate with greater thickness.
   
 - Is this evidence *conclusive* one way or another?
-  - This evidence is not conclusive. Although there is a general pattern of greater            thickness meaning lower elasticity seen for thicknesses of 0.022, 0.032, and 0.081, the     same does not apply when the thickness is 0.064. Elasticity values at this thickness       are all either equal to or higher than those at a thickness of 0.032, even though 0.064     is greater. There would have to be testing with a wider range of thickness values to       determine is elasticity is intensive or not.
+  - This evidence is not conclusive. Although there is a general pattern of greater             thickness meaning lower elasticity seen for thicknesses of 0.022, 0.032, and 0.081, the     same does not apply when the thickness is 0.064. Elasticity values at this thickness        are all either equal to or higher than those at a thickness of 0.032, even though 0.064     is greater. There would have to be testing with a wider range of thickness values to        determine is elasticity is intensive or not.
 
 # References
 <!-- -------------------------------------------------- -->
