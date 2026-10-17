@@ -186,21 +186,20 @@ separate to tidy these data.
 df_q2 <-
   alloys_mod %>%
   pivot_longer(
-    cols = c("E00", "E45", "mu00", "mu45"),
-    names_to = c("E_angle", "mu_angle"),
-    values_to = "vals"
+    names_to = "varang",
+    values_to = "value",
+    cols = c(-thick, -rep)
   ) %>%
   separate(
-    col = "E_angle",
-    into = c("E_name", "E_angle"),
-    sep = 1
+    col = varang,
+    into = c("var", "ang"),
+    sep = -2,
+    convert = TRUE
   ) %>%
-    separate(
-      col = "mu_angle",
-      into = c("mu_name", "mu_angle"),
-      sep = 2
-    ) 
-## TODO: pivot and separate here!
+  pivot_wider(
+    names_from = var,
+    values_from = value
+  )
 
 df_q2
 ```
