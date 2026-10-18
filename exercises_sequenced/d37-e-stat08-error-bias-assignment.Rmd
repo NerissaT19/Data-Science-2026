@@ -58,7 +58,8 @@ Compute the errors $\epsilon_c$ using Michelson's measurements `c_meas` and the 
 ```{r q1-task}
 ## TASK: Compute `epsilon_c`
 df_q1 <-
-  df_michelson
+  df_michelson %>%
+  mutate(epsilon_c = c_meas - c_true)
 
 df_q1 %>%
   ggplot(aes(epsilon_c)) +
@@ -74,13 +75,24 @@ Estimate the mean and standard deviation of $\epsilon_c$ from `df_q1.` Is the er
 ```{r q2-task}
 ## TASK: Estimate `epsilon_mean` and `epsilon_sd` from df_q1
 df_q2 <-
-  df_q1
+  df_q1 %>%
+  summarize(
+    epsilon_mean = mean(epsilon_c),
+    epsilon_sd = sd(epsilon_c)
+  )
+
+df_q2
+c_michelson_uncertainty
 ```
 
 **Observations**:
 
 - Is `epsilon_mean` large or small compared to `epsilon_sd`?
+  `epsilon_mean` is large compared to `epsilon_sd`.
+  
 - Is `epsilon_mean` large or small compared to `c_michelson_uncertainty?`?
+  `epsilon_mean` is large compared to `c_michelson_uncertainty`.
+  
 - `epsilon_mean` is about twice `epsilon_sd`; it is much larger. These measurements are *biased*.
 - `epsilon_mean` is about three times `c_michelson_uncertainty`; it is much larger.
 
@@ -91,7 +103,7 @@ Use the following tests to check your answers.
 assertthat::assert_that(abs((df_q2 %>% pull(epsilon_mean)) - 151.942) < 1e-3)
 assertthat::assert_that(abs((df_q2 %>% pull(epsilon_sd)) - 79.01055) < 1e-3)
 
-print("Great job!")
+print("Great job!") 
 ```
 
 Generally, we want our errors to have *zero mean*---the case where the errors have zero mean is called *unbiased*. The quantity $\mathbb{E}[\epsilon]$ is called *bias*, and an estimate such as $\hat{c}$ with $\mathbb{E}[\epsilon] \neq 0$ is called *biased*.
@@ -106,7 +118,18 @@ Use a CLT approximation to construct a $99%$ confidence interval on the mean of 
 
 ```{r q3-task}
 ## TASK: Compute a 99% confidence interval on the mean of c_meas
-C <- 0.99
+q <- qnorm(1 - 0.01 / 2)
+df_q3 <-
+  df_q1 %>%
+  summarize(
+    c_mean = mean(c_meas),
+    c_sd = sd(c_meas),
+    samples = n(),
+    c_lo = c_mean - q * c_sd / sqrt(samples),
+    c_hi = c_mean + q * c_sd / sqrt(samples)
+  )
+
+  
 
 ## NOTE: This checks if the CI contains c_true
 (df_q3 %>% pull(c_lo) <= c_true) & (c_true <= df_q3 %>% pull(c_hi))
