@@ -1,7 +1,7 @@
 ---
 title: "Estimating Pi With a Shotgun"
-author: "(Your name here)"
-date: 2020-
+author: "Nerissa Theisen"
+date: 2026-10-19
 output:
   github_document:
     toc: true
@@ -111,8 +111,13 @@ Pick a sample size $n$ and generate $n$ points *uniform randomly* in the square 
 
 ```{r q1-task}
 ## TASK: Choose a sample size and generate samples
-n <- NA_real_ # Choose a sample size
-df_q1 <- NA # Generate the data
+n <- 1000 # Choose a sample size
+df_q1 <- tibble(
+  x = runif(n, min = 0, max = 1),
+  y = runif(n, min = 0, max = 1)
+) # Generate the data
+
+df_q1 
 ```
 
 Use the following to check that you've used the correct variable names. (NB. This does not check correctness.)
@@ -148,6 +153,8 @@ Answer the questions below.
 ## TASK: Finish implementing this function
 stat <- function(x, y) {
   # TODO: Finish implementing this function
+  x <- (sqrt(1 - x^2)) * 4
+  y <- (sqrt(1 - y^2)) * 4
 }
 ```
 
@@ -158,20 +165,20 @@ Implement your own assert statements. They should pass using your implementation
 
 # Check the value for points *inside* the circle
 assertthat::assert_that(
-  # tibble(x = ?, y = ?) %>% # Pick a point *inside* the circle
+  tibble(x = 0, y = 0) %>% # Pick a point *inside* the circle
     mutate(stat = stat(x, y)) %>% 
     pull(stat) %>% 
-    .[[1]] ==
+    .[[1]] == 4,
   # ???, # Write the correct value of stat() here
   msg = "Incorrect value when a point is inside the circle"
 )
 
 # Check the value for points *outside* the circle
 assertthat::assert_that(
-  # tibble(x = ?, y = ?) %>% # Pick a point *outside* the circle
+  tibble(x = 1, y = 1) %>% # Pick a point *outside* the circle
     mutate(stat = stat(x, y)) %>% 
     pull(stat) %>% 
-    .[[1]] ==
+    .[[1]] == 0,
   # ???, # Write the correct value of stat() here
   msg = "Incorrect value when a point is outside the circle"
 )
@@ -181,9 +188,16 @@ print("Your assertions passed, but make sure they're checking the right thing!")
 *Observations*
 
 - You chose a correct value of `stat(x, y)` when `x, y` is *outside* the circle. Why did you choose this value?
-  - (Justify your value here)
+  - I chose this value based on the given equation:
+  
+    $$\pi = \mathbb{E}[4 \times I_{X \in S_c}].$$ 
+    When a point is outside the circle, the indicator function takes I = 0. We are             multiplying 4 by 0, so I made the correct value 0. 
+  
 - You chose a correct value of `stat(x, y)` when `x, y` is *inside* the circle. Why did you choose this value?
-  - (Justify your value here)
+  - I chose this value based on the given equation:
+  
+    $$\pi = \mathbb{E}[4 \times I_{X \in S_c}].$$ 
+    When a point is inside the circle, the indicator function takes I = 1. We are              multiplying 4 by 1, so I made the correct value 4. 
 
 ### __q3__ Estimate $\pi$
 
@@ -192,7 +206,8 @@ Using your data in `df_q1`, estimate $\pi$.
 ```{r q3-task}
 ## TASK: Estimate pi using your data from q1
 df_q3 <- 
-  df_q1 %>% 
+  df_q1 %>%
+  summarize(pi_est = mean(stat(x, y)))
   # TODO: Estimate pi as the column `pi_est`
 df_q3
 ```
@@ -237,6 +252,7 @@ df_q4 <-
           # Estimate pi (pi_est) using the resampled data;
           # this should be *identical* to the
           # code you wrote for q3
+          summarize(pi_est = mean(stat(x, y))) %>%
           pull(pi_est)
       }
     )
@@ -251,7 +267,7 @@ df_q4 %>%
 *Observations*
 
 - What is a range of plausible values, based on the sampling distribution you've generated?
-  - (Your response here)
+  - A range of plausible values for pi is between 3.075 and 3.175.
 
 ### __q5__ Bootstrap percentile confidence interval
 
@@ -265,8 +281,8 @@ df_q5 <-
   df_q4 %>% 
   summarize(
     # TODO: Compute pi_lo and pi_up
-    # pi_lo = ?
-    # pi_up = ?
+    pi_lo = quantile(pi_est, probs = c(0.05 / 2)),
+    pi_up = quantile(pi_est, probs = c(1 - (0.05 / 2)))
   )
 
 df_q5
@@ -282,20 +298,33 @@ Compute a CLT-based confidence interval for $\pi$ at the 95% confidence level (`
 
 ```{r q6-task}
 df_q1 %>%
+  summarize(
+    pi_lo = mean(stat(x, y)) - qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(1000),
+    pi_up = mean(stat(x, y)) + qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(1000)
+  )
 ```
 
 **Observations**:
 
 - Does your intervals include the true value of $\pi$?
-  - (Bootstrap CI: yes or no?)
-  - (CLT CI: yes or no?)
+  - Bootstrap CI: Yes
+  - CLT CI: Yes
+  
 - How closely do your bootstrap CI and CLT CI agree?
-  - (Your answer here)
+  - My bootstrap CI and CLT CI closely agree. The upper and lower bounds of both intervals     are less than 0.01 off from each other.
+  
 - Comment on the width of your CI(s). Would your estimate of $\pi$ be good enough for roughly estimating an area (e.g., to buy enough paint for an art project)? Would your estimate of $\pi$ be good enough for precisely calculating a trajectory (e.g., sending a rocket into orbit)?
-  - (Good enough as a rough estimate?)
-  - (Good enough as a precise estimate?)
+  - My estimate of pi would be good enough as a rough estimate. Both CIs
+    are only about 0.12 wide. Small errors, especially those less than 1, wouldn’t
+    cause much of an issue in tasks that require less precision, like
+    buying supplies for an art project.
+  - My estimate of pi would not be good enough for precise calculations.
+    With a CI width of about 0.12, the estimate isn’t narrowed down
+    enough to be useful in situations where even a few decimals being
+    wrong could be catastrophic.
+  
 - What would be a *valid* way to make your CI more narrow?
-  - (Your answer here)
+  - A valid way to make your CI more narrow would be to lower the confidence level.
 
 # References
 <!-- -------------------------------------------------- -->
