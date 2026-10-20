@@ -93,7 +93,7 @@ df_antibiotics %>%
   ggplot(aes(x = effectiveness, y = bacteria, color = gram)) +
   geom_point() + 
   scale_x_log10() +
-  facet_grid(.~ antibiotic, scales = "free_x") +
+  facet_grid(.~ antibiotic) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
