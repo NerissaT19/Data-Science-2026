@@ -298,32 +298,35 @@ opportunity to think about why this is.**
 > How do the three antibiotics vary in their effectiveness against
 > bacteria of different genera and Gram stain?
 
-*Observations* - What is your response to the question above? - The
-three antibiotics vary widely in their effectiveness against bacteria of
-different genera and Gram strain. Penicillin is the most effective
-against bacteria of a positive Gram strain. Its MIC was over 0.1 for
-every bacteria with a negative Gram strain, while its MIC was 0.1 or
-under for 6 out of 7 bacteria with a positive Gram strain. Meanwhile,
-neomycin and streptomycin had a less concrete divide between strains,
-although the lowest effectiveness occurrences were for bacteria with a
-positive Gram strain. For neomycin, the MIC values were close together
-whether the strain was negative or positive, except for three large
-outliers for bacteria with positive Gram strain. For streptomycin, most
-of the MIC values were under 2.5 whether the strain was negative or
-positive. There was one outlier for bacteria with a negative strain and
-three outliers for bacteria with a positive strain. Penicillin was
-significantly less effective against aerobacter aerogenes, escherichia
-coli, klebsiella pneumoniae, mycobacterium tubercolosis, proteus
-vulgaris, pseudomonas aeroguinosa, salmonella typhosa, and salmonella
-schottmuelleri than streptomycin and neomycin. Penicillin also had the
-highest MIC values, with it being the only antibiotic to have values
-over 100 However, penicillin was the most effective antibiotic against
-bacillus anthracis, diplococcus pneumonia, streptococcus hemolyticus,
-and streptococcus viridans. Streptomycin had the lowest MIC values.
-Streptomycin and penicillin had close effectiveness values in a couple
-of instances, and there were a few times where streptomycin and neomycin
-had close values, but neomycin always had a noticeable difference in
-effectiveness from penicillin.
+*Observations* 
+
+- What is your response to the question above? 
+
+  - The three antibiotics vary widely in their effectiveness against bacteria of
+    different genera and Gram strain. Penicillin is the most effective
+    against bacteria of a positive Gram strain. Its MIC was over 0.1 for
+    every bacteria with a negative Gram strain, while its MIC was 0.1 or
+    under for 6 out of 7 bacteria with a positive Gram strain. Meanwhile,
+    neomycin and streptomycin had a less concrete divide between strains,
+    although the lowest effectiveness occurrences were for bacteria with a
+    positive Gram strain. For neomycin, the MIC values were close together
+    whether the strain was negative or positive, except for three large
+    outliers for bacteria with positive Gram strain. For streptomycin, most
+    of the MIC values were under 2.5 whether the strain was negative or
+    positive. There was one outlier for bacteria with a negative strain and
+    three outliers for bacteria with a positive strain. Penicillin was
+    significantly less effective against aerobacter aerogenes, escherichia
+    coli, klebsiella pneumoniae, mycobacterium tubercolosis, proteus
+    vulgaris, pseudomonas aeroguinosa, salmonella typhosa, and salmonella
+    schottmuelleri than streptomycin and neomycin. Penicillin also had the
+    highest MIC values, with it being the only antibiotic to have values
+    over 100 However, penicillin was the most effective antibiotic against
+    bacillus anthracis, diplococcus pneumonia, streptococcus hemolyticus,
+    and streptococcus viridans. Streptomycin had the lowest MIC values.
+    Streptomycin and penicillin had close effectiveness values in a couple
+    of instances, and there were a few times where streptomycin and neomycin
+    had close values, but neomycin always had a noticeable difference in
+    effectiveness from penicillin.
 
 - Which of your visuals above (1 through 5) is **most effective** at
   helping to answer this question?
@@ -344,15 +347,18 @@ and in 1984 *Streptococcus fecalis* was renamed *Enterococcus fecalis*
 > Why was *Diplococcus pneumoniae* was renamed *Streptococcus
 > pneumoniae*?
 
-*Observations* - What is your response to the question above? -
-Diplococcus pnuemoniae was likely renamed to Streptococcus pnuemoniae
-because of its similarities in properties to the other Streptococcus
-bacteria (disregarding the later renamed Streptococcus fecalis). For
-both streptomycin and neomycin, Diplococcus pnuemoniae, Streptococcus
-viridans, and Streptococcus hemolyticus had the three highest MIC
-values. They also had similar values for penicillin. When taking every
-antibiotic into account, the three bacteria have very close median
-effectiveness.
+*Observations* 
+
+- What is your response to the question above? 
+
+  - Diplococcus pnuemoniae was likely renamed to Streptococcus pnuemoniae
+    because of its similarities in properties to the other Streptococcus
+    bacteria (disregarding the later renamed Streptococcus fecalis). For
+    both streptomycin and neomycin, Diplococcus pnuemoniae, Streptococcus
+    viridans, and Streptococcus hemolyticus had the three highest MIC
+    values. They also had similar values for penicillin. When taking every
+    antibiotic into account, the three bacteria have very close median
+    effectiveness.
 
 - Which of your visuals above (1 through 5) is **most effective** at
   helping to answer this question?
