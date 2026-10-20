@@ -188,7 +188,9 @@ df_antibiotics
 df_antibiotics %>%
   ggplot(aes(x = effectiveness, y = bacteria, color = gram)) +
   geom_point() + 
-  facet_grid(.~ antibiotic, scales = "free_x")
+  scale_x_log10() +
+  facet_grid(.~ antibiotic, scales = "free_x") +
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 ![](c05-antibiotics-assignment_files/figure-gfm/q1.1-1.png)<!-- -->
@@ -206,13 +208,11 @@ your other visuals.
 ``` r
 # WRITE YOUR CODE HERE
 df_antibiotics %>%
-  ggplot(aes(x = effectiveness, y = antibiotic, fill = gram)) +
-  geom_col() +
-  facet_wrap(vars(bacteria), scales = "free_x") +
-  theme(
-    strip.text = element_text(size = 5.5),
-    axis.text.x = element_text(size = 5.5)
-  )
+  ggplot(aes(x = bacteria, y = effectiveness, fill = antibiotic)) +
+  geom_col(position = "dodge") +
+  facet_grid(.~gram) +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 ![](c05-antibiotics-assignment_files/figure-gfm/q1.2-1.png)<!-- -->
@@ -229,9 +229,10 @@ your other visuals.
 ``` r
 # WRITE YOUR CODE HERE
 df_antibiotics %>%
-  filter(antibiotic == "neomycin") %>%
-  ggplot(aes(x = gram, y = bacteria, size = effectiveness)) +
-  geom_count()
+  ggplot(aes(x = bacteria, y = effectiveness, color = antibiotic)) +
+  geom_point() +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 ![](c05-antibiotics-assignment_files/figure-gfm/q1.3-1.png)<!-- -->
@@ -298,45 +299,44 @@ opportunity to think about why this is.**
 > bacteria of different genera and Gram stain?
 
 *Observations* 
+
 - What is your response to the question above? 
+
   - The three antibiotics vary widely in their effectiveness against bacteria of
     different genera and Gram strain. Penicillin is the most effective
-    against bacteria of a positive Gram strain. Its MIC was 1 or over for
-    every bacteria with a negative Gram strain, while its MIC was 1 or under
-    for every bacteria with a positive Gram strain. Meanwhile, neomycin and
-    streptomycin had a less concrete divide between strains, although the
-    lowest effectiveness occurrences were for bacteria with a positive Gram
-    strain. For neomycin, the MIC values were close together whether the
-    strain was negative or positive, except for three large outliers for
-    bacteria with positive Gram strain. For streptomycin, most of the MIC
-    values were under 2.5 whether the strain was negative or positive. There
-    was one outlier for bacteria with a negative strain and three outliers
-    for bacteria with a positive strain. Penicillin was significantly less
-    effective against aerobacter aerogenes, escherichia coli, klebsiella
-    pneumoniae, mycobacterium tubercolosis, proteus vulgaris, pseudomonas
-    aeroguinosa, salmonella typhosa, and salmonella schottmuelleri than
-    streptomycin and neomycin. Penicillin also had the highest MIC values,
-    with it being the only antibiotic to have values over 50. However,
-    penicillin was the most effective antibiotic against bacillus anthracis,
-    diplococcus pneumonia, streptococcus hemolyticus, and streptococcus
-    viridans. Streptomycin had the lowest MIC values, with all of the values
-    being under 20. Streptomycin and penicillin had close effectiveness
-    values in a couple of instances, and there were a few times where
-    streptomycin and neomycin had close values, but neomycin always had a
-    significant difference in effectiveness from penicillin.
+    against bacteria of a positive Gram strain. Its MIC was over 0.1 for
+    every bacteria with a negative Gram strain, while its MIC was 0.1 or
+    under for 6 out of 7 bacteria with a positive Gram strain. Meanwhile,
+    neomycin and streptomycin had a less concrete divide between strains,
+    although the lowest effectiveness occurrences were for bacteria with a
+    positive Gram strain. For neomycin, the MIC values were close together
+    whether the strain was negative or positive, except for three large
+    outliers for bacteria with positive Gram strain. For streptomycin, most
+    of the MIC values were under 2.5 whether the strain was negative or
+    positive. There was one outlier for bacteria with a negative strain and
+    three outliers for bacteria with a positive strain. Penicillin was
+    significantly less effective against aerobacter aerogenes, escherichia
+    coli, klebsiella pneumoniae, mycobacterium tubercolosis, proteus
+    vulgaris, pseudomonas aeroguinosa, salmonella typhosa, and salmonella
+    schottmuelleri than streptomycin and neomycin. Penicillin also had the
+    highest MIC values, with it being the only antibiotic to have values
+    over 100 However, penicillin was the most effective antibiotic against
+    bacillus anthracis, diplococcus pneumonia, streptococcus hemolyticus,
+    and streptococcus viridans. Streptomycin had the lowest MIC values.
+    Streptomycin and penicillin had close effectiveness values in a couple
+    of instances, and there were a few times where streptomycin and neomycin
+    had close values, but neomycin always had a noticeable difference in
+    effectiveness from penicillin.
 
 - Which of your visuals above (1 through 5) is **most effective** at
   helping to answer this question?
   - Visuals 1 and 2 were the most effective in helping to answer this
     question.
 - Why?
-  - Visual 1 was helpful for comparing effectiveness values for each
-    antibiotic on the same scale, while Visual 2 was helpful for looking
-    more closely at the actual effectiveness values, since it had a
-    different scale for each bacteria. When one plot had an unclear
-    comparison, the other was usually able to make it up for it. They
-    were also useful because they considered both gram and all of the
-    antibiotics, unlike the rest of the visuals.
+  - Visuals 1 and 2 were helpful because, unlike the other visuals, they
+    compared all of the variables in the dataset. I could look at
+    effectiveness against different types of bacteria and Gram strain at
+    the same time.
 
 #### Guiding Question 2
 
@@ -348,15 +348,17 @@ and in 1984 *Streptococcus fecalis* was renamed *Enterococcus fecalis*
 > pneumoniae*?
 
 *Observations* 
+
 - What is your response to the question above? 
+
   - Diplococcus pnuemoniae was likely renamed to Streptococcus pnuemoniae
-    because of its similarities in properties to the other Streptococcus
-    bacteria (disregarding the later renamed Streptococcus fecalis). For
-    both streptomycin and neomycin, Diplococcus pnuemoniae, Streptococcus
-    viridans, and Streptococcus hemolyticus had the three highest MIC
-    values. They also had similar values for penicillin. When taking every
-    antibiotic into account, the three bacteria have very close median
-    effectiveness.
+  because of its similarities in properties to the other Streptococcus
+  bacteria (disregarding the later renamed Streptococcus fecalis). For
+  both streptomycin and neomycin, Diplococcus pnuemoniae, Streptococcus
+  viridans, and Streptococcus hemolyticus had the three highest MIC
+  values. They also had similar values for penicillin. When taking every
+  antibiotic into account, the three bacteria have very close median
+  effectiveness.
 
 - Which of your visuals above (1 through 5) is **most effective** at
   helping to answer this question?
@@ -366,13 +368,13 @@ and in 1984 *Streptococcus fecalis* was renamed *Enterococcus fecalis*
   - Visual 4 was useful for looking at effectiveness as a whole for each
     bacteria across the dataset, while Visual 1 was helpful for
     comparing effectiveness values based on antibiotic. Having both the
-    general overview and the more specific plot ensured that
+    general overview and the more specific plot helped ensure that
     similarities or differences were there across the board. The other
     plots are harder to use when comparing specific bacteria because
     certain values are not visible or the variables are grouped together
-    in unhelpful ways. For example, Visuals 3 and 5 aren’t well tailored
-    this question because they split up Gram strain, and the bacteria we
-    are inspecting all have the same strain.
+    in unhelpful ways. For example, Visuals 5 isn’t well tailored this
+    question because it splits up Gram strain, and the bacteria we are
+    inspecting all have the same strain.
 
 # References
 
