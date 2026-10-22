@@ -82,14 +82,21 @@ Based on your results, can you reject the null hypothesis **H_0** for the popula
 ```{r q1-task}
 ## TASK: Compute a confidence interval on the mean, use to answer the question
 ## above
-df_sample
+df_sample %>% 
+  summarize(
+    price_lo = mean(price) - qnorm(1 - (1 - 0.95) / 2) * sd(price) / sqrt(100),
+    price_up = mean(price) + qnorm(1 - (1 - 0.95) / 2) * sd(price) / sqrt(100)
+  )
 price_threshold
 ```
 
 **Observations**:
 
 - Can you reject the null hypothesis **H_0**?
+  - I can reject the null hypothesis based on this confidence interval since it includes       mean prices higher than the threshold. 
+
 - How does this affect your decision?
+  - I would still be wary since the confidence interval includes mean prices below the         threshold, but I would buy the diamonds.
 
 ## Different Scenario, Different Hypotheses
 <!-- -------------------------------------------------- -->
@@ -125,12 +132,42 @@ Use the techniques you learned in `e-stat09-bootstrap` to estimate a 99-percent 
 ```{r q2-task}
 ## TASK: Estimate a confidence interval for the proportion of high-cut diamonds
 ## in the population. Look to `e-stat09-bootstrap` for starter code.
+df_sample2 <- df_sample %>% 
+  # Create the bootstrap resamplings
+  bootstraps(., times = 1000) %>% 
+  # Finicky code: Compute an estimate for each resampling (`splits` column)
+  mutate(
+    # The `map_*` family of functions iterates a provided function over a column
+    sample_mean = map_dbl(
+      # Chosen column
+      splits,
+      # Function we provide (defined inline)
+      function(split_df) {
+        # First, we use `analysis()` to translate the split into usable data
+        split_df %>% 
+          analysis() %>% 
+          # Then, we carry out whatever analysis we want
+          summarize(sample_mean = mean(cut == c("Premium", "Ideal"))) %>% 
+          # One last wrangling step
+          pull(sample_mean)
+      }
+    )
+  )
+
+df_sample2 %>%
+  summarize(
+    mean_lo = quantile(sample_mean, probs = c(0.01/2)),
+    mean_up = quantile(sample_mean, probs = c(1 - 0.01/2))
+  )
 ```
 
 **Observations**:
 
 - Can you reject the null hypothesis **H_0**?
+  - I can't reject the null hypothesis since the confidence interval only includes             proportions under 50%.
+  
 - How does this affect your decision?
+  - This means I will buy no diamonds. 
 
 ## Closing Thoughts
 <!-- -------------------------------------------------- -->
@@ -145,6 +182,10 @@ Compute the population mean price for the diamonds. Did you reject the null hypo
 
 ```{r q3-task}
 ## TASK: Compute the population mean of diamond price
+df_sample %>%
+  summarize(
+    mean_price = mean(price)
+  )
 
 price_threshold
 ```
@@ -152,8 +193,13 @@ price_threshold
 **Observations**:
 
 - Did you reject the null hypothesis in q1?
+  - I rejected the null hypothesis in q1.
+  
 - What is the actual truth?
+  - The null hypothesis was actually correct.
+  
 - What decision did you make?
+  - I bought the diamonds in bulk. 
 
 When I did q1, I **did not reject the null**. Note the weird wording there: **did not reject the null**, rather than "accepted the null". In this hypothesis testing framework we never actually *accept* the null hypothesis, we can only *fail to reject the null*. What this means is that we still maintain the possibility that the null is false, and all we can say for sure is that our data are not sufficient to reject the null hypothesis.
 
@@ -167,13 +213,22 @@ Compute the proportion of high-cut diamonds in the population. Did you reject th
 
 ```{r q4-task}
 ## TASK: Compute the population proportion of high-cut diamonds
+df_sample %>%
+  summarize(
+    pop_proportion = mean(cut == c("Premium", "Ideal"))
+  )
 ```
 
 **Observations**:
 
 - Did you reject the null hypothesis in q2?
+  - I did not reject the null hypothesis in q2.
+  
 - What is the actual truth?
+  - The null hypothesis was correct.
+  
 - What decision did you make?
+  - I did not buy any diamonds. 
 
 When I did q2 I **did reject the null hypothesis**. It happens that this was the correct choice; the true proportion of high-cut diamonds is greater than 50-percent.
 
