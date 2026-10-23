@@ -66,8 +66,8 @@ ci_lwr <- mu - 1.96 * sd / sqrt(n)
 ci_upr <- mu + 1.96 * sd / sqrt(n)
 ## TODO: Use the equations above to compute a prediction interval for the
 ##       normal distribution rnorm(mean = mu, sd = sd)
-pi_lwr <- NA_real_
-pi_upr <- NA_real_
+pi_lwr <- mu - 1.96 * sd
+pi_upr <- mu + 1.96 * sd
 ```
 
 Use the following tests to check your work.
@@ -136,7 +136,14 @@ Using the formulas above, estimate CI and PI using `diamonds_train`. Visualize t
 ```{r q2-task}
 ## TODO: Estimate CI and PI using the formulas from q1, use diamonds_train
 ##       and assign your estimates to columns ci_lwr, ci_upr, pi_lwr, pi_upr
-df_q2 <- NA
+df_q2 <- diamonds_train %>%
+  summarize(
+    ci_lwr = mean(price) - 1.96 * sd(price) / sqrt(10000),
+    ci_upr = mean(price) + 1.96 * sd(price) / sqrt(10000),
+    pi_lwr = mean(price) - 1.96 * sd(price),
+    pi_upr = mean(price) + 1.96 * sd(price)
+  )
+
 df_q2
 ```
 
@@ -167,8 +174,13 @@ df_q2 %>%
 **Observations**:
 
 - Compare the intervals against the price observations; do the intervals and observations relate to each other like you would expect?
+  - The confidence interval is generally what I would expect. Most of the prices in            `diamond_train` are below 5000, and the confidence interval is between about 3783 and      about 4028. However, the prediction interval isn't what I would expect at all. It          includes negative numbers, and none of the prices are negative.
+
 - Are the CI and PI working correctly? How would you check this?
+  - It doesn't seem like the PI is working correctly, but the CI probably is. I would check     this making sure the CI includes the mean price and the PI includes the appropriate        fraction of prices.
+
 - What *assumptions* did you make when defining your CI and PI above? Are those assumptions valid for these data?
+  - I assumed that the data have a normal distribution when making the CI and PI. However,     the distribution is not actually normal.
 
 ### __q3__ Test your intervals
 
@@ -177,13 +189,26 @@ Test whether your CI and PI are constructed correctly: Remember the definitions 
 ```{r q3-task}
 ## TODO: Devise a test to see if your CI and PI are correctly reflecting
 ##       the diamonds population; use diamonds_validation in your testing
+diamonds_validate %>%
+  summarize(mean_price = mean(price))
+
+cross_join(
+  diamonds_validate,
+  df_q2 %>% select(pi_lwr, pi_upr)
+) %>%
+  summarize(price_fraction = mean(pi_lwr <= price & pi_upr >= price))
 ```
 
 **Observations**:
 
 - Does your CI include the mean price of diamonds?
+  - My CI includes the mean price of diamonds. 
+  
   - Do we expect the CI it to *always* include the true parameter?
+    - We do expect the CI to always include the true parameter.
+  
 - Does your PI include the appropriate fraction of diamond prices?
+  - My PI has a close fraction to the appropriate fraction. It is about 0.94, while the        actual fraction should be 0.96.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
