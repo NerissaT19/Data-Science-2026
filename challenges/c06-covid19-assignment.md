@@ -525,6 +525,7 @@ include in your summaries,* and justify why!
 ``` r
 ## TASK: Compute mean and sd for cases_per100k and deaths_per100k
 df_normalized %>%
+  filter(date == "2022-05-13") %>%
   summarize(
     mean_cases = mean(cases_per100k, na.rm = TRUE),
     mean_deaths = mean(deaths_per100k, na.rm = TRUE),
@@ -536,14 +537,17 @@ df_normalized %>%
     ## # A tibble: 1 × 4
     ##   mean_cases mean_deaths sd_cases sd_deaths
     ##        <dbl>       <dbl>    <dbl>     <dbl>
-    ## 1      9975.        174.    8449.      159.
+    ## 1     24774.        375.    6233.      160.
 
 - Which rows did you pick?
-  - I chose the rows in the dataset that didn’t have an NA value for
-    `cases_per100k` or `deaths_per100k`.
+  - I chose the rows where the date was 2022-05-13.
 - Why?
-  - If I had kept the rows with a value of NA in, it would have set my
-    mean and standard deviation values to NA as well.
+  - Finding the mean and standard deviations of cases and deaths over
+    all time doesn’t tell us much because those numbers are constantly
+    changing for each county. I chose to look at only one day so that
+    the values are fixed. It is the most recent day in the dataset, so
+    it shows the averages and standard deviations that the U.S. “ended”
+    on.
 
 ### **q7** Find and compare the top 10
 
@@ -556,78 +560,94 @@ you found in q6. Note any observations.
 ## TASK: Find the top 10 max cases_per100k counties; report populations as well
 df_normalized %>%
   arrange(-cases_per100k) %>%
-  filter(dense_rank(desc(cases_per100k)) <= 10) %>%
-  select(date, county, state, cases, population, cases_per100k)
+  group_by(county) %>%
+  summarize(
+    population = max(population), 
+    cases = max(cases),
+    cases_per100k = max(cases_per100k)
+    ) %>%
+  slice_max(order_by = cases_per100k, n = 10) 
 ```
 
-    ## # A tibble: 32 × 6
-    ##    date       county state cases population cases_per100k
-    ##    <date>     <chr>  <chr> <dbl>      <dbl>         <dbl>
-    ##  1 2022-05-12 Loving Texas   196        102       192157.
-    ##  2 2022-05-13 Loving Texas   196        102       192157.
-    ##  3 2022-05-09 Loving Texas   195        102       191176.
-    ##  4 2022-05-10 Loving Texas   195        102       191176.
-    ##  5 2022-05-11 Loving Texas   195        102       191176.
-    ##  6 2022-05-08 Loving Texas   194        102       190196.
-    ##  7 2022-05-07 Loving Texas   192        102       188235.
-    ##  8 2022-05-05 Loving Texas   191        102       187255.
-    ##  9 2022-05-06 Loving Texas   191        102       187255.
-    ## 10 2022-05-04 Loving Texas   190        102       186275.
-    ## # ℹ 22 more rows
+    ## # A tibble: 10 × 4
+    ##    county                   population cases cases_per100k
+    ##    <chr>                         <dbl> <dbl>         <dbl>
+    ##  1 Loving                          102   196       192157.
+    ##  2 Chattahoochee                 10767  7486        69527.
+    ##  3 Nome Census Area               9925  6245        62922.
+    ##  4 Northwest Arctic Borough       7734  4837        62542.
+    ##  5 Crowley                        5630  3347        59449.
+    ##  6 Bethel Census Area            18040 10362        57439.
+    ##  7 Dewey                          5779  3139        54317.
+    ##  8 Dimmit                        10663  5760        54019.
+    ##  9 Jim Hogg                       5282  2648        50133.
+    ## 10 Kusilvak Census Area           8198  4084        49817.
 
 ``` r
 ## TASK: Find the top 10 deaths_per100k counties; report populations as well
 df_normalized %>%
   arrange(-deaths_per100k) %>%
-  filter(dense_rank(desc(deaths_per100k)) <= 10) %>%
-  select(date, county, state, deaths, population, deaths_per100k)
+  group_by(county) %>%
+  summarize(
+    population = max(population), 
+    deaths = max(deaths),
+    deaths_per100k = max(deaths_per100k)
+    ) %>%
+  slice_max(order_by = deaths_per100k, n = 10) 
 ```
 
-    ## # A tibble: 386 × 6
-    ##    date       county   state deaths population deaths_per100k
-    ##    <date>     <chr>    <chr>  <dbl>      <dbl>          <dbl>
-    ##  1 2022-02-19 McMullen Texas      9        662          1360.
-    ##  2 2022-02-20 McMullen Texas      9        662          1360.
-    ##  3 2022-02-21 McMullen Texas      9        662          1360.
-    ##  4 2022-02-22 McMullen Texas      9        662          1360.
-    ##  5 2022-02-23 McMullen Texas      9        662          1360.
-    ##  6 2022-02-24 McMullen Texas      9        662          1360.
-    ##  7 2022-02-25 McMullen Texas      9        662          1360.
-    ##  8 2022-02-26 McMullen Texas      9        662          1360.
-    ##  9 2022-02-27 McMullen Texas      9        662          1360.
-    ## 10 2022-02-28 McMullen Texas      9        662          1360.
-    ## # ℹ 376 more rows
+    ## # A tibble: 10 × 4
+    ##    county            population deaths deaths_per100k
+    ##    <chr>                  <dbl>  <dbl>          <dbl>
+    ##  1 McMullen                 662      9          1360.
+    ##  2 Galax city              6638     78          1175.
+    ##  3 Motley                  1156     13          1125.
+    ##  4 Hancock                75690    277          1054.
+    ##  5 Emporia city            5381     55          1022.
+    ##  6 Towns                  11417    116          1016.
+    ##  7 Jerauld                 2029     20           986.
+    ##  8 Loving                   102      1           980.
+    ##  9 Robertson              69344    305           980.
+    ## 10 Martinsville city      13101    124           946.
 
 **Observations**:
 
-- The top 10 cases per 100k all came from Loving, Texas. The top 10
-  deaths per 100k came from three different counties.
+- The highest cases per 100k value was over 100,000 greater than the
+  second highest value. Meanwhile, the second highest value is about
+  20,000 greater than the tenth highest value.
 
-- All of the largest cases per 100k values occurred in 2022. Most of the
-  largest deaths per 100k values did so as well, but some occurred in
-  2021.
+- The difference between the highest and tenth highest deaths per 100k
+  value was much smaller than the difference between the highest and
+  tenth highest cases per 100k value. The difference is about 400.
 
-- The top 10 cases per 100k were observed in a county with a small
-  population, at 102 people.
+- All of the highest deaths per 100k values were under 1500, while the
+  highest cases per 100k value was about 192,157. The tenth highest
+  cases per 100k value was about 49,817.
 
-- The amount of cases in Loving, Texas outnumbered the population.
+- The maximum number of cases in Loving county exceeded its population.
 
-- The largest deaths per 100k value occurred in a county that only saw 9
-  deaths. However, the county has a small population of 662.
+- Loving is the only county to be on both the top 10 for cases and
+  deaths per 100k.
 
-- The top 10 deaths per 100k values were all over 1000, while the mean I
-  found in q6 was 174.
+- The highest cases per 100k values all happened in counties with a
+  population of under 20,000. The highest deaths per 100k values
+  happened in counties with populations ranging from 102 to over 75,000.
 
-- The top 10 cases per 100k values were close to 200k, while the mean I
-  found in q6 was only 9975.
-  
+- All of the highest deaths per 100k counts are much greater than the
+  mean deaths I found in q6. The mean was about 375, while the highest
+  counts range from 946 to 1,360.
+
+- The highest cases per 100k count is significantly greater than the
+  cases I found in q6. The mean was about 24,774, while the highest was
+  about 192,157. The nine other highest values ranged from being about
+  25,000-45,000 greater than the mean.
 
 - When did these “largest values” occur?
 
-  - The largest values for cases per 100k all occurred in Loving, Texas
-    in the Spring of 2022. The largest values for deaths per 100k
-    occurred in 2021 and 2022, in three different counties with
-    populations between 662 and 6638.
+  - The largest values for cases per 100k all occurred in counties with
+    populations under 20,000. The largest values for deaths per 100k
+    occurred in counties with populations up to about 75,690. All of
+    these counties had less than 350 deaths.
 
 ## Self-directed EDA
 
