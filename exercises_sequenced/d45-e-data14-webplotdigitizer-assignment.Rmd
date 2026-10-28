@@ -87,14 +87,32 @@ Congrats! You just *liberated* data from a plot!
 
 ```{r q4-task}
 ## TODO: Load the data you extracted above
-df_price <- NA
-df_production <- NA
+df_price <- read_csv(
+  "C:/Users/polar/OneDrive/Documents/School/2026-2027 1st Semester/Data Science/RStudio/data-science-curriculum-build/Data-Science-2026/exercises_sequenced/data/beef-price.csv",
+  col_names = c("month", "price")
+  ) %>%
+  slice(6:232) 
+df_production <- read_csv(
+  "C:/Users/polar/OneDrive/Documents/School/2026-2027 1st Semester/Data Science/RStudio/data-science-curriculum-build/Data-Science-2026/exercises_sequenced/data/beef-production.csv",
+  col_names = c("month", "production_percent")
+  ) 
+
+df_join <- bind_cols(df_price, df_production)
+
+df_join
+
+df_join %>%
+  ggplot(aes(x = price, y = production_percent)) +
+  geom_line()
 ```
 
 **Observations**:
 
 - What relationship do you see between price and production levels?
+  - Generally, as price increases, production levels decrease.
+
 - Does that relationship change over time?
+  - The relationship was more unclear at the beginning. It generally stayed consistent         until month 5, when both production levels and price started to increase at the same       time.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
