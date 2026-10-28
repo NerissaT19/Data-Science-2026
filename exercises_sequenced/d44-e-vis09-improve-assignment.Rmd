@@ -44,6 +44,11 @@ Create your improved graph here
 
 ```{r q1-task}
 ## TODO: Create an improved version of the graph above
+mpg %>%
+  mutate(manufacturer = fct_reorder(manufacturer, cty)) %>%
+  ggplot(aes(manufacturer, cty)) +
+  geom_boxplot() +
+  coord_flip()
 ```
 
 ### __q2__ Use concepts from the reading to improve the following graph. *Make sure your graph shows all the same variables*, no more and no fewer.
@@ -62,6 +67,11 @@ Create your improved graph here
 
 ```{r q2-task}
 ## TODO: Create an improved version of the graph above
+as_tibble(mtcars) %>%
+  mutate(model = rownames(mtcars)) %>%
+  mutate(model = fct_reorder(model, mpg)) %>%
+  ggplot(aes(x = mpg, y = model)) +
+  geom_point()
 ```
 
 ### __q3__ Use concepts from the reading to improve the following graph. *Make sure your graph shows all the same variables*, no more and no fewer.
@@ -77,6 +87,9 @@ Create your improved graph here
 
 ```{r q3-task}
 ## TODO: Create an improved version of the graph above
+diamonds %>%
+  ggplot(aes(clarity, fill = cut)) +
+  geom_bar(position = "dodge")
 ```
 
 ### __q4__ Use concepts from the reading to improve the following graph. *Make sure your graph shows all the same variables*, no more and no fewer.
@@ -94,6 +107,9 @@ Create your improved graph here
 
 ```{r q4-task}
 ## TODO: Create an improved version of the graph above
+diamonds %>%
+  ggplot(aes(cut)) +
+  geom_bar()
 ```
 
 <!-- include-exit-ticket -->
