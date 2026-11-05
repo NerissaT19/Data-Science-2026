@@ -570,7 +570,7 @@ df_data %>%
     ## (`stat_boxplot()`).
 
 ![](c09-income-assignment_files/figure-gfm/q8-task-1.png)<!-- -->
-
+ 
 **Observations**: Question: Does the income estimate of households
 across the U.S. generally increase as family size increases?
 
