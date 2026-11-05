@@ -1,7 +1,7 @@
 ---
 title: "US Income"
-author: "(Your name here)"
-date: 202X-XX-XX
+author: "Nerissa Theisen"
+date: 2026-10-29
 output:
   github_document:
     toc: true
@@ -50,7 +50,7 @@ library(tidyverse)
 
 ```{r q1-task}
 ## TODO: Give the filename for your copy of Table B01003
-filename_pop <- NA_character_
+filename_pop <- "C:/Users/polar/OneDrive/Documents/School/2026-2027 1st Semester/Data Science/RStudio/data-science-curriculum-build/Data-Science-2026/challenges/data/ACSDT5Y2018.B01003-Data.csv"
 
 ## NOTE: No need to edit
 df_pop <-
@@ -80,7 +80,7 @@ This means that for cases listed as `*****` the US Census Bureau recommends trea
 
 ```{r q2-task}
 ## TODO: Give the filename for your copy of Table S1903
-filename_income <- NA_character_
+filename_income <- "C:/Users/polar/OneDrive/Documents/School/2026-2027 1st Semester/Data Science/RStudio/data-science-curriculum-build/Data-Science-2026/challenges/data/ACSST5Y2018.S1903-Data.csv"
 
 ## NOTE: No need to edit
 df_income <-
@@ -121,6 +121,27 @@ df_q3 <-
   ) %>%
   mutate(across(contains("median"), as.numeric)) %>%
 ## TODO: Pivot the data, rename the columns
+  pivot_longer(
+    cols = c(
+      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!2-person families",
+      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!2-person families",
+      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!3-person families",
+      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!3-person families",
+      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!4-person families",
+      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!4-person families",
+      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!5-person families",
+      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!5-person families",
+      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!6-person families",
+      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!6-person families"
+    ),
+    names_to = c(".value", "category"),
+    names_pattern = "(Estimate|Margin of Error).*?(\\d-person families)"
+  ) %>%
+  rename(
+    "geographic_area_name" = "Geographic Area Name",
+    "income_estimate" = "Estimate",
+    "income_moe" = "Margin of Error"
+  ) %>%
   glimpse()
 ```
 
@@ -151,8 +172,13 @@ $$\text{MOE} = 1.645 \times \text{SE}.$$
 ### __q4__ Convert the margin of error to standard error. Additionally, compute a 99% confidence interval on income, and normalize the standard error to `income_CV = income_SE / income_estimate`. Provide these columns with the names `income_SE, income_lo, income_hi, income_CV`.
 
 ```{r q4-task}
-
-df_q4
+df_q4 <- df_q3 %>%
+  mutate(
+    income_SE = income_moe / 1.645,
+    income_CV = income_SE / income_estimate,
+    income_lo = income_estimate - (2.575 * income_SE),
+    income_hi = income_estimate + (2.575 * income_SE)
+  ) 
 ```
 
 Use the following tests to check your work:
@@ -207,8 +233,8 @@ One last wrangling step: We need to join the two datasets so we can compare popu
 
 ```{r q5-task}
 ## TODO: Join df_q4 and df_pop by the appropriate column
-
-df_data
+df_data <- left_join(df_q4, df_pop) %>%
+  select(-"Geographic Area Name", -"Margin of Error!!Total", -"...5")
 ```
 
 # Analysis
@@ -246,13 +272,20 @@ df_data %>%
 **Observations**:
 
 - Document your observations here.
-  - (Your response here)
-  - (Your response here)
-  - ...
+  - The widest confidence interval is for 5-person families in Nantucket county. 
+  - 2-person families have the smallest confidence intervals in each county. 
+  - 6-person families have the widest confidence intervals in each county, except for          Nantucket County.
+  - There are only 3 instances of confidence intervals including median incomes of over        175,000.
+  - 2-person families usually have a confidence interval including the lowest incomes in       each county.
+  - Dukes county does not appear to have a confidence interval for 6-person families.
+  - You can't always conclude which category of household in a county has a higher median      income because the confidence intervals often overlap.
+  - You can make conclusions about income estimate comparisons based on this graph because     it clearly shows the points where the estimates are.
+  
 - Can you confidently distinguish between household incomes in Suffolk county? Why or why not?
-  - (Your response here)
+  - You can't confidently disintguish between household incomes in Suffolk county. The         confidence intervals for each category overlap, so you can't tell if the median incomes     are actually higher or lower than each other.
+  
 - Which counties have the widest confidence intervals?
-  - (Your response here)
+  - Nantucket, Hampshire, Dukes, and Berkshire have the widest confidence intervals.
 
 In the next task you'll investigate the relationship between population and uncertainty.
 
@@ -261,14 +294,21 @@ In the next task you'll investigate the relationship between population and unce
 *Hint*: Remember that standard error is a function of *both* variability (e.g. variance) and sample size.
 
 ```{r q7-task}
+df_data %>%
+  group_by(population_estimate) %>%
+  mutate(income_SE = mean(income_SE)) %>%
+  ggplot(aes(x = population_estimate, y = income_SE)) +
+  geom_point() +
+  geom_smooth()
 ```
 
 **Observations**:
 
 - What *overall* trend do you see between `SE` and population? Why might this trend exist?
-  - (Your response here)
+  - There is an overall trend of standard error decreasing as population increases. This       trend might exist because standard error is dependent on the square root of population     size. Dividing standard deviation by a larger number will result in a smaller standard     error.
+  
 - What does this *overall* trend tell you about the relative ease of studying small vs large counties?
-  - (Your response here)
+  - The overall trend tells me that it is easier to study larger counties since you'll be      able to make closer estimates with them. 
 
 # Going Further
 <!-- ----------------------------------------------------------------------- -->
@@ -279,11 +319,24 @@ Now it's your turn! You have income data for every county in the United States: 
 
 ```{r q8-task}
 ## TODO: Pose and answer your own question about the data
+df_data %>%
+  ggplot(aes(x = category, y = income_estimate)) +
+  geom_boxplot() 
 ```
 
 **Observations**:
+Question: Does the income estimate of households across the U.S. generally increase as family size increases? 
 
-- Document your observations here
+- Observations
+  - The highest median income estimate is for 4-person families.
+  - The lowest median income estimate is for 2-person families.
+  - 5 and 6-person families have about the same median income estimate. 
+  - The median income estimate increases as you go from 2 to 4-person families, but the         pattern stops afterwards.
+  - The greatest income estimate outlier value occurred for 5-person families. 
+  - 5 and 6-person family households have more extreme outliers than 4-person family            households.
+  - The variability of income estimates increases as family size increases. 
+  
+The income estimate of households across the U.S. generally increases as family size increases from 2 to 4 family members, but the estimate decreases and evens out for 5 and 6-person families. 
 
 Ideas:
 
