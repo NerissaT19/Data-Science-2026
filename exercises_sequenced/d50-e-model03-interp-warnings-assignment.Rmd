@@ -64,8 +64,18 @@ Fit two models on `diamonds_train`, one for `carat <= 1` and one for `carat > 1`
 ## TODO: Fit two models, one to lower (carat <= 1) and
 #        one to upper (carat > 1) diamonds.
 #        Use formula = price ~ cut
-fit_lower <- NA
-fit_upper <- NA
+fit_lower <- diamonds_train %>%
+  filter(carat <= 1) %>%
+  lm(
+    data = .,
+    formula = price ~ cut
+  )
+fit_upper <- diamonds_train %>%
+  filter(carat > 1) %>%
+  lm(
+    data = .,
+    formula = price ~ cut
+  )
 
 ## NOTE: No need to modify this code
 tibble(cut = c("Fair", "Good", "Very Good", "Premium", "Ideal")) %>%
@@ -89,7 +99,10 @@ tibble(cut = c("Fair", "Good", "Very Good", "Premium", "Ideal")) %>%
 **Observations**:
 
 - What model predictions did you expect?
+  - I expected the lower carat model to have a downward trend and the upper carat model to      have an upwards trend. 
+
 - Did the model predictions match your expectations?
+  - The model predictions did match my expectations. 
 
 *Why is this happening?* Let's investigate!
 
@@ -101,8 +114,18 @@ Repeat the same exercise above, but instead of `price ~ cut` fit `carat ~ cut`. 
 ## TODO: Fit two models, one to lower (carat <= 1) and
 #        one to upper (carat > 1) diamonds.
 #        Use formula = carat ~ cut
-fit_carat_lower <- NA
-fit_carat_upper <- NA
+fit_carat_lower <- diamonds_train %>%
+  filter(carat <= 1) %>%
+  lm(
+    data = ., 
+    formula = carat ~ cut
+  )
+fit_carat_upper <- diamonds_train %>%
+  filter(carat > 1) %>%
+  lm(
+    data = ., 
+    formula = carat ~ cut
+  )
 
 ## NOTE: No need to change this code
 tibble(cut = c("Fair", "Good", "Very Good", "Premium", "Ideal")) %>%
@@ -126,7 +149,10 @@ tibble(cut = c("Fair", "Good", "Very Good", "Premium", "Ideal")) %>%
 **Observations**:
 
 - What trends do the lower and upper models between `carat` and `cut`?
+  - The upper model between `carat` and `cut` has a downward trend until "Very Good," where     the carat increases before decreasing again. The lower model between `carat` and `cut`      has a purely downward trend. 
+
 - How might this trend relate to the `price ~ cut` behavior we saw above?
+  - The fact that the upper model didn't have a purely downward trend may relate to the         fact that `cut` increases with `price`. The lower model had a downward trend in both        cases, so it is not oppositionally affected by `price`.
 
 We can try to fix these issues by adding more predictors. But that leads to our second warning....
 
@@ -144,13 +170,19 @@ The following task will demonstrate this effect.
 #        formula = price ~ cut
 fit_carat_cut <-
   diamonds_train %>%
-  filter(carat <= 1)
-  # lm()
+  filter(carat <= 1) %>%
+  lm(
+    data = .,
+    formula = price ~ carat + cut
+  )
 
 fit_cut_only <-
   diamonds_train %>%
-  filter(carat <= 1)
-  # lm()
+  filter(carat <= 1) %>%
+  lm(
+    data = ., 
+    formula = price ~ cut
+  )
 
 ## NOTE: No need to change this code
 tibble(
@@ -177,9 +209,14 @@ tibble(
 **Observations**:
 
 - What effect does `cut` have on `price` for the `cut_only` model?
+  - `cut` has a negative effect on `price` for the `cut_only` model.
+
 - What effect does `cut` have on `price` for the `carat_cut` model?
+  - `cut` generally has a positive effect on `price` for the `carat_cut` model.
+
 - What might account for this behavior?
   - *Note*: Feel free to peek at the solution for this answer; this is a *subtle point*.
+  - The `carat_cut` model ends up being more accurate because it is using two variables to     predict `price`, while the `cut_only` model has to use `cut` in place of `carat` to        predict `price`.
 
 ## Main Punchline
 
