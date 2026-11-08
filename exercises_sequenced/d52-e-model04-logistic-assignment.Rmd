@@ -158,14 +158,19 @@ The last step of data setup is up to you!
 ### __q1__ Perform a train-validate split of `df_data`. Make sure to *shuffle* the data when splitting, and ensure that `df_train` and `df_validate` together contain the entire dataset.
 
 ```{r q1-task}
+set.seed(101)
 n_train <- 200
 
-## TODO: Perform a test-validate split
 df_train <-
-  df_data
+  df_data %>%
+  slice_sample(n = n_train)
 
 df_validate <-
-  df_data
+  anti_join(
+    df_data,
+    df_train,
+    by = "rowid"
+  )
 ```
 
 Use the following to check your code.
@@ -288,7 +293,10 @@ df_basic %>%
 
 - Suppose we chose to classify predictions with probability `pr_heart_disease > 0.5` as persons having heart disease, and those below `pr_heart_disease <= 0.5` as not having heart disease. Would this model perform well or poorly?
   - *Hint*: Think about how many persons with `heart_disease` would be correctly identified as having the disease, and how many would truly have `heart_disease` but whom we would not detect.
+  - This model would perform poorly. It makes determinations of probability based off of        sex, so every female has a low probability for heart disease and every male has a high      probability. This would cause false positives for males and false negatives for females.
+  
 - The probabilities are all at one of two levels; what about the model structure `heart_disease ~ sex` explains this behavior?
+  - There are only two options for `sex`, so the probabilities will only end up at one of       two levels.
 
 In the next modeling exercise we'll discuss how to *quantitatively* assess the results of a classifier. For the moment, know that our objective is usually to maximize the rates of true positives (TP) and true negatives (TN). In our example, true positives are when we correctly identify the presence of heart disease, and true negatives are when we correctly flag the absence of heart disease. Note that we can make errors in "either direction": a false positive (FP) or a false negative (FN), depending on the underlying true class.
 
@@ -320,7 +328,11 @@ These numbers don't mean a whole lot on their own; we'll use them to compare per
 
 ```{r q3-task}
 ## TODO: Fit a logistic regression; choose your own predictor variables
-fit_q3 <- NA
+fit_q3 <- glm(
+  formula = heart_disease ~ exang + thal,
+  data = df_train,
+  family = "binomial"
+)
 ```
 
 Use the following to check your work.
@@ -342,7 +354,8 @@ print("Nice!")
 ## TODO: Predict with your model fit_q3; convert log_odds_ratio to probabilities
 ##       using inv.logit(), assign this to the column pr_heart_disease
 df_q4 <-
-  df_validate
+  df_validate %>%
+  mutate(pr_heart_disease = inv.logit(heart_disease))
 
 ## Plot the predicted probabilities and actual classes
 df_q4 %>%
@@ -378,7 +391,7 @@ print("Excellent!")
 
 ```{r q5-task}
 ## TODO: Choose a threshold value
-pr_threshold <- NA_real_
+pr_threshold <- 0.63
 
 ## NOTE: No need to edit this; just inspect the results
 df_q4 %>%
@@ -399,7 +412,10 @@ df_q4 %>%
 **Observations**:
 
 - How does your classification model compare to `fit_basic` in terms of true positives (TP)?
+  - My classification model does better than `fit_basic` in terms of true positives. It has     more true positives than `fit_basic` and has no false positives.
+  
 - How does your classification model compare to `fit_basic` in terms of true negatives (TN)?
+  - My classification model does better than `fit_basic` in terms of true negatives. It has     more true negatives than `fit_basic` and has no false negatives.
 
 <!-- include-exit-ticket -->
 # Exit Ticket
