@@ -66,7 +66,7 @@ Following Step 1, we need to assign batch identifiers to group the data.
 #        consecutive groups of 4 rows have the same id
 df_q1 <-
   df_data %>%
-  mutate(id = row_number())
+  mutate(id = (row_number() - 1) %/% 4)
 df_q1
 ```
 
@@ -103,9 +103,15 @@ Next, we'll use our knowledge about confidence intervals and the CLT to set the 
 ```{r q2-task}
 ## TODO: Edit the code below to create an `id` column where
 #        consecutive groups of 4 rows have the same id
-X_grand <- NA_real_
-X_g4_lo <- NA_real_
-X_g4_up <- NA_real_
+X_grand <- df_q1 %>%
+  summarize(mean = mean(X)) %>%
+  pull()
+X_sd <- 
+  df_q1 %>%
+  summarize(sd = sd(X)) %>%
+  pull()
+X_g4_lo <- X_grand - 3 * X_sd / 2
+X_g4_up <- X_grand + 3 * X_sd / 2
 X_g4_lo
 X_grand
 X_g4_up
@@ -146,11 +152,13 @@ df_q1 %>%
 
 **Observations**:
 - How many points would you *expect* to lie outside the control limits, assume the data were completely random?
-  - (Your response here)
+  - Assuming the data were completely random, I would expect 0 points to lie outside the        control limits.
+  
 - How many points lie *outside* the control limits? Is this about as many as you would expect if the data were random?
-  - (Your response here)
+  - One point lies outside the control limits. This is about as many as I would expect if       the data were random. 
+  
 - Do you see any coherent patterns in the points? Does this make sense?
-  - (Your response here)
+  - There doesn't seem to be a coherent pattern in the points. This makes sense since the       data are random. 
 
 ## Control Chart: Application
 
@@ -164,7 +172,7 @@ download.file(url, filename)
 df_mass <-
   read_table(
     filename,
-    skip = 25,
+    skip = 49,
     col_names = c(
       "date",
       "standard_id",
@@ -194,11 +202,13 @@ df_mass %>%
 
 **Observations**:
 - These measurement were carried out by some of the most experienced measurement scientists in the world. Are professional measurements *exactly* repeatable?
-  - (Your response here)
+  - Professional measurements are exactly repeatable. 
+  
 - What patterns do you notice?
-  - (Your observation here)
-  - (Your observation here)
-  - ...
+  - Most measurements are within 0.1 micrograms of each other.
+  - Dates above 85 had a higher range of measurements.
+  - Most measurements were within 0.05 micrograms of each other at dates lower than 85.
+  - There is no overarching pattern between measurements and dates. 
 
 Next, prepare the data for a control chart of the NIST data.
 
@@ -210,16 +220,24 @@ n_group <- 10
 ## Batched data; edit this code
 df_q4 <-
   df_mass %>%
-  group_by(date) %>%
+  mutate(id = (row_number() - 1) %/% n_group) %>%
+  group_by(id) %>%
   summarize(
     Y_mean = mean(Y),
     date = min(date)
   )
 ## Control limits and grand mean; complete this code
-Y_mean <- NA_real_
-Y_sd <- NA_real_
-Y_g_lo <- NA_real_
-Y_g_up <- NA_real_
+Y_mean <- df_mass %>%
+  summarize(mean = mean(Y)) %>%
+  pull()
+
+Y_sd <- df_mass %>%
+  summarize(sd = sd(Y)) %>%
+  pull()
+
+Y_g_lo <- Y_mean - 3 * Y_sd / sqrt(10)
+Y_g_up <- Y_mean + 3 * Y_sd / sqrt(10)
+
 Y_g_lo
 Y_mean
 Y_g_up
@@ -257,9 +275,14 @@ df_q4 %>%
 
 **Observations**:
 - Copy the patterns you noticed above down here; compare those against this new control chart.
-  - (Your responses here)
+  - In the original chart, most measurements were within 0.1 micrograms of each other. In       this chart, most measurements are within 0.07 micrograms of each other.
+  - In the original chart, dates above 85 had a higher range of measurements. This is still     true for the new chart.
+  - In the original chart, most measurements were within 5 micrograms of each other at dates     lower than 85. This is still true for the new chart.
+  - In the original chart, there was no overarching pattern between measurements and dates.     The new chart has a clearer pattern. 
+  
 - What additional observations can you make, based on the control chart?
-  - (Your response here)
+  - Measurements are generally greater at dates above 85.
+  - Most measurements were taken at a date above 83. 
 
 Remember that a control chart is only a *detection* tool; to say more, you would need to go investigate the data collection process.
 
