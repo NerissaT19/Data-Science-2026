@@ -75,7 +75,7 @@ NB. When Zach counted the homes (on 2025-01-08), he found 20 unoccupied out of 5
   - More than 99% of the homes are occupied.
   
 - Are there any sources of *real* uncertainty in the percent occupied you calculated?
-  - There are sources of real uncertainty. Houses in a town are not guaranteed to be            occupied, and the number of occupied vs. unoccupied homes won't be consistent across        every location. 
+  - There are sources of real uncertainty. Houses in a town are not guaranteed to be            occupied because, for instance, people may move to other towns or move in with their        spouse and leave their original homes. Occupants may also die and leave their houses        empty. The number of occupied vs. unoccupied homes won't be consistent across every         location. 
   
 - Are there any sources of *erroneous* uncertainty in the percent occupied you calculated?
   - The only possible source of erroneous uncertainty would come from a miscount of             unoccupied houses since we have to take count manually. 
@@ -361,7 +361,7 @@ df_interval_bootstrap
   
 - Note that we used the *random* sample with the bootstrap procedure in this task. Could we use the bootstrap to make a confidence interval using the sequential sample (`df_sample_seq`) that would be representative of all of Helvig? Why or why not?
   - No.
-  - A sequential sample isn't representative of all of Helvig. It only gives us data from      one small area in the city and can overrepresent the prevalence of certain last names      because of factors like families wanting to live near each other.
+  - A sequential sample isn't representative of all of Helvig. It only gives us data from       one small area in the city. The bootstrap procedure resamples based on the sample you       give it, not the entire population. If you give it a sequential sample, it will assume      the prevalence of last names in the entire population is roughly the same as that seen      in the sample. Factors like families wanting to live near each other can over represent     the prevalance of certain last names in a sequential sample and give us results that        don't properly reflect Helvig as a whole.
 
 ### __q9__ Discover possible measurements
 

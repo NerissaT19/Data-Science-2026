@@ -131,8 +131,11 @@ you still need to count, because your numbers *will* be different!
 - Are there any sources of *real* uncertainty in the percent occupied
   you calculated?
   - There are sources of real uncertainty. Houses in a town are not
-    guaranteed to be occupied, and the number of occupied vs. unoccupied
-    homes won’t be consistent across every location.
+    guaranteed to be occupied because, for instance, people may move to
+    other towns or move in with their spouse and leave their original
+    homes. Occupants may also die and leave their houses empty. The
+    number of occupied vs. unoccupied homes won’t be consistent across
+    every location.
 - Are there any sources of *erroneous* uncertainty in the percent
   occupied you calculated?
   - The only possible source of erroneous uncertainty would come from a
@@ -580,9 +583,14 @@ df_interval_bootstrap
   representative of all of Helvig? Why or why not?
   - No.
   - A sequential sample isn’t representative of all of Helvig. It only
-    gives us data from one small area in the city and can overrepresent
-    the prevalence of certain last names because of factors like
-    families wanting to live near each other.
+    gives us data from one small area in the city. The bootstrap
+    procedure resamples based on the sample you give it, not the entire
+    population. If you give it a sequential sample, it will assume the
+    prevalence of last names in the entire population is roughly the
+    same as that seen in the sample. Factors like families wanting to
+    live near each other can over represent the prevalance of certain
+    last names in a sequential sample and give us results that don’t
+    properly reflect Helvig as a whole.
 
 ### **q9** Discover possible measurements
 
