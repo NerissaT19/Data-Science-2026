@@ -153,8 +153,10 @@ Answer the questions below.
 ## TASK: Finish implementing this function
 stat <- function(x, y) {
   # TODO: Finish implementing this function
-  x <- (sqrt(1 - x^2)) * 4
-  y <- (sqrt(1 - y^2)) * 4
+  ind <- (x^2 + y^2) <= 1
+  scaled <- ind * 4
+  
+  return(scaled)
 }
 ```
 
@@ -197,7 +199,7 @@ print("Your assertions passed, but make sure they're checking the right thing!")
   - I chose this value based on the given equation:
   
     $$\pi = \mathbb{E}[4 \times I_{X \in S_c}].$$ 
-    When a point is inside the circle, the indicator function takes I = 1. We are              multiplying 4 by 1, so I made the correct value 4. 
+    When a point is inside the circle, the indicator function takes I = 1. We are               multiplying 4 by 1, so I made the correct value 4. 
 
 ### __q3__ Estimate $\pi$
 
@@ -267,7 +269,7 @@ df_q4 %>%
 *Observations*
 
 - What is a range of plausible values, based on the sampling distribution you've generated?
-  - A range of plausible values for pi is between 3.075 and 3.175.
+  - A range of plausible values for pi is between 3 and 3.2.
 
 ### __q5__ Bootstrap percentile confidence interval
 
@@ -299,8 +301,8 @@ Compute a CLT-based confidence interval for $\pi$ at the 95% confidence level (`
 ```{r q6-task}
 df_q1 %>%
   summarize(
-    pi_lo = mean(stat(x, y)) - qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(1000),
-    pi_up = mean(stat(x, y)) + qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(1000)
+    pi_lo = mean(stat(x, y)) - qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(sum(n)),
+    pi_up = mean(stat(x, y)) + qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(sum(n))
   )
 ```
 
@@ -311,20 +313,20 @@ df_q1 %>%
   - CLT CI: Yes
   
 - How closely do your bootstrap CI and CLT CI agree?
-  - My bootstrap CI and CLT CI closely agree. The upper and lower bounds of both intervals     are less than 0.01 off from each other.
+  - My bootstrap CI and CLT CI closely agree. The lower and upper bounds are both less than     0.01 apart from each other.
   
 - Comment on the width of your CI(s). Would your estimate of $\pi$ be good enough for roughly estimating an area (e.g., to buy enough paint for an art project)? Would your estimate of $\pi$ be good enough for precisely calculating a trajectory (e.g., sending a rocket into orbit)?
   - My estimate of pi would be good enough as a rough estimate. Both CIs
-    are only about 0.12 wide. Small errors, especially those less than 1, wouldn’t
+    are only about 0.2 wide. Small errors, especially those less than 1, wouldn’t
     cause much of an issue in tasks that require less precision, like
     buying supplies for an art project.
   - My estimate of pi would not be good enough for precise calculations.
-    With a CI width of about 0.12, the estimate isn’t narrowed down
+    With a CI width of about 0.2, the estimate isn’t narrowed down
     enough to be useful in situations where even a few decimals being
     wrong could be catastrophic.
   
 - What would be a *valid* way to make your CI more narrow?
-  - A valid way to make your CI more narrow would be to lower the confidence level.
+  - A valid way to make your CI more narrow would be to increase the sample size.
 
 # References
 <!-- -------------------------------------------------- -->

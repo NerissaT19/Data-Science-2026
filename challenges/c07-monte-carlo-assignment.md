@@ -206,18 +206,18 @@ df_q1
 ```
 
     ## # A tibble: 1,000 × 2
-    ##        x     y
-    ##    <dbl> <dbl>
-    ##  1 0.449 0.404
-    ##  2 0.705 0.531
-    ##  3 0.875 0.474
-    ##  4 0.426 0.788
-    ##  5 0.724 0.304
-    ##  6 0.776 0.380
-    ##  7 0.902 0.566
-    ##  8 0.499 0.811
-    ##  9 0.663 0.486
-    ## 10 0.929 0.842
+    ##        x      y
+    ##    <dbl>  <dbl>
+    ##  1 0.612 0.267 
+    ##  2 0.449 0.803 
+    ##  3 0.954 0.277 
+    ##  4 0.391 0.114 
+    ##  5 0.156 0.965 
+    ##  6 0.505 0.725 
+    ##  7 0.408 0.288 
+    ##  8 0.302 0.492 
+    ##  9 0.408 0.0571
+    ## 10 0.732 0.0421
     ## # ℹ 990 more rows
 
 Use the following to check that you’ve used the correct variable names.
@@ -269,8 +269,10 @@ Answer the questions below.
 ## TASK: Finish implementing this function
 stat <- function(x, y) {
   # TODO: Finish implementing this function
-  x <- (sqrt(1 - x^2)) * 4
-  y <- (sqrt(1 - y^2)) * 4
+  ind <- (x^2 + y^2) <= 1
+  scaled <- ind * 4
+  
+  return(scaled)
 }
 ```
 
@@ -346,7 +348,7 @@ df_q3
     ## # A tibble: 1 × 1
     ##   pi_est
     ##    <dbl>
-    ## 1   3.12
+    ## 1   3.14
 
 Use the following to check that you’ve used the correct variable names.
 (NB. This does not check correctness.)
@@ -426,7 +428,7 @@ df_q4 %>%
 
 - What is a range of plausible values, based on the sampling
   distribution you’ve generated?
-  - A range of plausible values for pi is between 3.075 and 3.175.
+  - A range of plausible values for pi is between 3 and 3.2.
 
 ### **q5** Bootstrap percentile confidence interval
 
@@ -452,7 +454,7 @@ df_q5
     ## # A tibble: 1 × 2
     ##   pi_lo pi_up
     ##   <dbl> <dbl>
-    ## 1  3.06  3.18
+    ## 1  3.03  3.24
 
 ### **q6** CLT confidence interval
 
@@ -470,15 +472,15 @@ done something *wrong* in one of the tasks….
 ``` r
 df_q1 %>%
   summarize(
-    pi_lo = mean(stat(x, y)) - qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(1000),
-    pi_up = mean(stat(x, y)) + qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(1000)
+    pi_lo = mean(stat(x, y)) - qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(sum(n)),
+    pi_up = mean(stat(x, y)) + qnorm(1 - (1 - 0.95) / 2) * sd(stat(x, y)) / sqrt(sum(n))
   )
 ```
 
     ## # A tibble: 1 × 2
     ##   pi_lo pi_up
     ##   <dbl> <dbl>
-    ## 1  3.06  3.18
+    ## 1  3.04  3.24
 
 **Observations**:
 
@@ -486,24 +488,24 @@ df_q1 %>%
   - Bootstrap CI: Yes
   - CLT CI: Yes
 - How closely do your bootstrap CI and CLT CI agree?
-  - My bootstrap CI and CLT CI closely agree. The upper and lower bounds
-    of both intervals are less than 0.01 off from each other.
+  - My bootstrap CI and CLT CI closely agree. The lower and upper bounds
+    are both less than 0.01 apart from each other.
 - Comment on the width of your CI(s). Would your estimate of $\pi$ be
   good enough for roughly estimating an area (e.g., to buy enough paint
   for an art project)? Would your estimate of $\pi$ be good enough for
   precisely calculating a trajectory (e.g., sending a rocket into
   orbit)?
   - My estimate of pi would be good enough as a rough estimate. Both CIs
-    are only about 0.12 wide. Small errors, especially those less than 1, wouldn’t
-    cause much of an issue in tasks that require less precision, like
-    buying supplies for an art project.
+    are only about 0.2 wide. Small errors, especially those less than 1,
+    wouldn’t cause much of an issue in tasks that require less
+    precision, like buying supplies for an art project.
   - My estimate of pi would not be good enough for precise calculations.
-    With a CI width of about 0.12, the estimate isn’t narrowed down
+    With a CI width of about 0.2, the estimate isn’t narrowed down
     enough to be useful in situations where even a few decimals being
     wrong could be catastrophic.
 - What would be a *valid* way to make your CI more narrow?
-  - A valid way to make your CI more narrow would be to lower the
-    confidence level.
+  - A valid way to make your CI more narrow would be to increase the
+    sample size.
 
 # References
 
