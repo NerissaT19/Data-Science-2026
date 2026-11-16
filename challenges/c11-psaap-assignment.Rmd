@@ -1,7 +1,7 @@
 ---
 title: "Regression Case Study: PSAAP II"
-author: "(Your name here)"
-date: 2020-
+author: "Nerissa Theisen"
+date: 2026-11-12
 output:
   github_document:
     toc: true
@@ -72,11 +72,19 @@ Figure 1. An example simulation, frozen at a specific point in time. An initial 
 
 ```{r q1-task}
 ## TODO: Perform your initial checks
+glimpse(df_psaap) 
+summary(df_psaap)
 ```
 
 **Observations**:
 
-- (Take notes here!)
+- There are a large range in values of the variables. Some are under 1, while others reach    the millions. 
+- `x` and likely `idx` are the only variables to have repeating values. 
+- The `I_0` variable has the largest values and the widest range in values.
+- The `d_p` variable has the smallest values.
+- The lengths and widths of all the channels in the dataset are very small.
+- There are 140 rows, but the `idx` variable only goes up to 35.
+
 
 The important variables in this dataset are:
 
@@ -113,6 +121,10 @@ The primary output of interest is `T_norm = (avg_T - T_f) / T_f`, the normalized
 ## TODO: Visualize the data in df_psaap with T_norm against x;
 ##       design your visual to handle the multiple simulations,
 ##       each identified by different values of idx
+df_psaap %>%
+  ggplot(aes(x = T_norm, y = idx, color = factor(x))) +
+  geom_point()
+
 ```
 
 ## Modeling
@@ -149,18 +161,24 @@ fit_nonphysical <-
 
 ## TODO: Compute a measure of accuracy for each fit above;
 ##       compare their relative performance
+mse(fit_baseline, df_train)
+mse(fit_cheat, df_train)
+mse(fit_nonphysical, df_train)
 ```
 
 **Observations**:
 
 - Which model is *most accurate*? Which is *least accurate*?
-  - (Your response here)
+  - `fit_cheat` is the most accurate model. `fit_nonphysical` is the least accurate model.
+  
 - What *Category* of variable is `avg_T`? Why is it such an effective predictor?
-  - (Your response here)
+  - `avg_T` is an output variable. It is such an effective predictor because both it and        `T_norm` relate to fluid temperature and therefore will relate closely to each other.
+  
 - Would we have access to `avg_T` if we were trying to predict a *new* value of `T_norm`? Is `avg_T` a valid predictor?
-  - (Your response here)
+  - If we were trying to predict a new value of `T_norm`, we would not have access to           `avg_t`, since both are output variables. In that sense, `avg_t` is not a valid             predictor. 
+  
 - What *Category* of variable is `idx`? Does it have any physical meaning?
-  - (Your response here)
+  - `idx` is a metadata variable. It does not have any physical meaning. 
 
 ### __q4__ Interpret this model
 
@@ -174,22 +192,34 @@ fit_q4 <-
   df_train %>% 
   lm(formula = T_norm ~ . - idx - avg_q - avg_T - rms_T)
 ## TODO: Use some of the functions we learned in e-model01 through e-model03
+fit_q4 %>%
+  tidy()
+
+df_psaap %>%
+  select(-idx, -avg_q, -avg_T, -rms_T) %>%
+  summarize(across(everything(), ~sd(.)))
 ```
 
 **Observations**:
 
 - Which columns are excluded in the model formula above? What categories do these belong to? Why are these important quantities to leave out of the model?
-  - (Your response here)
+  - `idx`, `avg_q`, `avg_t`, and `rms_T` are excluded in the model formula. `idx` is a          metadata variable and the rest are output variables. It is important to leave out`idx`      because it doesn't have a physical meaning and doesn't actually relate to `T_norm`.        Output variables should also be left out because `T_norm` is an output variable as
+     well, and we can't use the others to predict new values for it.
+  
 - Which inputs are *statistically significant*, according to the model?
-  - (Your response here)
+  - `L`, `W`, `U_0`, `C_fp`, `d_p`, and `I_0` are statistically significant. 
+  
 - What is the regression coefficient for `x`? What about the regression coefficient for `T_f`?
-  - (Your response here)
+  - The regression coefficient for `x` is 1.018323. The regression coefficient for `T_f` is     -0.000379.
+  
 - What is the standard deviation of `x` in `df_psaap`? What about the standard deviation of `T_f`? 
-  - (Your response here)
+  - The standard deviation of `x` is 0.2805121 in `df_psaap`. The standard deviation of         `T_f` is 38.94204 in `df_psaap`.
+  
 - How do these standard deviations relate to the regression coefficients for `x` and `T_f`?
-  - (Your response here)
+  - The standard deviations are larger when the regression coefficients are smaller for `x`     and `T_f`.
+  
 - Note that literally *all* of the inputs above have *some* effect on the output `T_norm`; so they are all "significant" in that sense. What does this tell us about the limitations of statistical significance for interpreting regression coefficients?
-  - (Your response here)
+  - Since statistical significance is technically always present, it has the limitation of     making regression coefficients seem like they have a greater effect than they actually     do.
 
 ## Contrasting CI and PI
 
@@ -297,11 +327,13 @@ bind_rows(
 **Observations**:
 
 - Which model tends to be more accurate? How can you tell from this predicted-vs-actual plot?
-  - (Your response here)
+  - The q4 model tends to be more accurate. I can tell this because the predictions are        generally closer to the `fit_simple` line and their pattern fits its slope more than in     the x-only model.
+  
 - Which model tends to be *more confident* in its predictions? Put differently, which model has *narrower prediction intervals*?
-  - (Your response here)
+  - The q4 model tends to be more confident in its predictions. 
+  
 - How many predictors does the `fit_simple` model need in order to make a prediction? What about your model `fit_q4`?
-  - (Your response here)
+  - The `fit_simple` model needs one predictor to make a prediction. `fit_q4` needs 18         predictors to make a prediction. 
 
 Based on these results, you might be tempted to always throw every reasonable variable into the model. For some cases, that might be the best choice. However, some variables might be *outside our control*; for example, variables involving human behavior cannot be fully under our control. Other variables may be *too difficult to measure*; for example, it is *in theory* possible to predict the strength of a component by having detailed knowledge of its microstructure. However, it is *patently infeasible* to do a detailed study of *every single component* that gets used in an airplane.
 
@@ -336,22 +368,50 @@ pr_level <- 0.8
 #        use the validation data to check your uncertainty estimates, and 
 #        make a recommendation on a *dependable range* of values for T_norm
 #        at the point `df_design`
-fit_q6 <- NA
+fit_q6 <- df_train %>%
+  lm(
+    data = .,
+    formula = T_norm ~ x + L + W + U_0
+  )
 
+mse(fit_q6, df_validate)
+
+df_q6 <- df_validate %>%
+  add_uncertainties(
+    model = fit_q6,
+    prefix = "pi",
+    interval = "prediction",
+    level = pr_level
+  )
+
+df_q6 %>%
+  summarize(coverage = mean(pi_lwr <= T_norm & T_norm <= pi_upr))
+
+df_design %>%
+  add_uncertainties(
+    model = fit_q6,
+    prefix = "pi",
+    interval = "prediction",
+    level = pr_level
+  )
 ```
 
 **Recommendation**:
 
 - How much do you trust your model? Why?
-  - (Your response here)
+  - I think my model is very trustworthy. It has a low mean squared error and the coverage     is greater than the desired level, which is already high.
+  
 - What kind of interval---confidence or prediction---would you use for this task, and why?
-  - (Your response here)
+  - I would use a prediction interval because we are using this for a single prototype.        Confidence intervals are better for groups, while prediction intervals are better for      individual observations. 
+  
 - What fraction of validation cases lie within the intervals you predict? (NB. Make sure to calculate your intervals *based on the validation data*; don't just use one single interval!) How does this compare with `pr_level`?
-  - (Your response here)
+  - The coverage fraction is about 0.933. This is larger than `pr_level`.
+  
 - What interval for `T_norm` would you recommend the design team to plan around?
-  - (Your response here)
+  - I would recommend that the design team plans around an interval of 1.457 to 2.296.
+  
 - Are there any other recommendations you would provide?
-  - (Your response here)
+  - They may want to consider fixing the variable `C_fp`, as it lowers the mean squared        error and narrows the prediction interval. However, it does slightly lower the coverage     from 0.933 to 0.9.
 
 *Bonus*: One way you could take this analysis further is to recommend which other variables the design team should tightly control. You could do this by fixing values in `df_design` and adding them to the model. An exercise you could carry out would be to systematically test the variables to see which ones the design team should more tightly control.
 
