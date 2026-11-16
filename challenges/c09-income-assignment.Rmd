@@ -122,18 +122,7 @@ df_q3 <-
   mutate(across(contains("median"), as.numeric)) %>%
 ## TODO: Pivot the data, rename the columns
   pivot_longer(
-    cols = c(
-      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!2-person families",
-      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!2-person families",
-      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!3-person families",
-      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!3-person families",
-      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!4-person families",
-      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!4-person families",
-      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!5-person families",
-      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!5-person families",
-      "Estimate!!Median income (dollars)!!FAMILY INCOME BY FAMILY SIZE!!6-person families",
-      "Margin of Error!!Median income (dollars) MOE!!FAMILY INCOME BY FAMILY SIZE!!6-person families"
-    ),
+    cols = c(contains("FAMILY INCOME BY FAMILY SIZE")),
     names_to = c(".value", "category"),
     names_pattern = "(Estimate|Margin of Error).*?(\\d-person families)"
   ) %>%
@@ -233,7 +222,7 @@ One last wrangling step: We need to join the two datasets so we can compare popu
 
 ```{r q5-task}
 ## TODO: Join df_q4 and df_pop by the appropriate column
-df_data <- left_join(df_q4, df_pop) %>%
+df_data <- left_join(df_q4, df_pop, by = join_by(Geography)) %>%
   select(-"Geographic Area Name", -"Margin of Error!!Total", -"...5")
 ```
 
@@ -295,17 +284,17 @@ In the next task you'll investigate the relationship between population and unce
 
 ```{r q7-task}
 df_data %>%
-  group_by(population_estimate) %>%
-  mutate(income_SE = mean(income_SE)) %>%
   ggplot(aes(x = population_estimate, y = income_SE)) +
   geom_point() +
-  geom_smooth()
+  geom_smooth() +
+  scale_x_log10() + 
+  scale_y_log10()
 ```
 
 **Observations**:
 
 - What *overall* trend do you see between `SE` and population? Why might this trend exist?
-  - There is an overall trend of standard error decreasing as population increases. This       trend might exist because standard error is dependent on the square root of population     size. Dividing standard deviation by a larger number will result in a smaller standard     error.
+  - There is an overall trend of standard error decreasing as population increases. This       trend might exist because standard error is dependent on the square root of sample         size. Dividing standard deviation by a larger number will result in a smaller standard     error. If the sample size taken for each county is proportional to its population, then     larger counties will have lower standard errors.
   
 - What does this *overall* trend tell you about the relative ease of studying small vs large counties?
   - The overall trend tells me that it is easier to study larger counties since you'll be      able to make closer estimates with them. 
@@ -334,7 +323,7 @@ Question: Does the income estimate of households across the U.S. generally incre
   - The median income estimate increases as you go from 2 to 4-person families, but the         pattern stops afterwards.
   - The greatest income estimate outlier value occurred for 5-person families. 
   - 5 and 6-person family households have more extreme outliers than 4-person family            households.
-  - The variability of income estimates increases as family size increases. 
+  - 2-person family households have the least variability in income estimates. 
   
 The income estimate of households across the U.S. generally increases as family size increases from 2 to 4 family members, but the estimate decreases and evens out for 5 and 6-person families. 
 
