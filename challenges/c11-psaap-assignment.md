@@ -743,9 +743,9 @@ df_design %>%
   - I would recommend that the design team plans around an interval of
     1.457 to 2.296.
 - Are there any other recommendations you would provide?
-  - They may want to consider fixing the variable `C_fp`, as it lowers
-    the mean squared error and narrows the prediction interval. However,
-    it does slightly lower the coverage from 0.933 to 0.9.
+  - The team may want to consider fixing the variable `C_fp`, as it
+    lowers the mean squared error and narrows the prediction interval.
+    However, it does slightly lower the coverage from 0.933 to 0.9.
 
 *Bonus*: One way you could take this analysis further is to recommend
 which other variables the design team should tightly control. You could
